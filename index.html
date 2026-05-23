@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Avto — discover, compare, and own the world's most exceptional cars." />
+<title>Avto — Drive the Extraordinary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="nav__inner container">
+      <a href="#" class="nav__logo" aria-label="Avto home">
+        <span class="nav__mark">A</span>
+        <span class="nav__word">avto</span>
+      </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#collection">Collection</a>
+        <a href="#features">Features</a>
+        <a href="#stats">Numbers</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a href="#contact" class="btn btn--ghost">Book a test drive</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="container hero__inner">
+        <p class="eyebrow">Curated since 2014</p>
+        <h1 class="hero__title">
+          Drive the <span class="accent">extraordinary</span>.
+        </h1>
+        <p class="hero__lede">
+          A handpicked collection of performance, luxury, and electric vehicles —
+          delivered to your driveway with white-glove service.
+        </p>
+        <div class="hero__cta">
+          <a href="#collection" class="btn btn--primary">Explore collection</a>
+          <a href="#features" class="btn btn--link">How it works →</a>
+        </div>
+      </div>
+      <div class="hero__scroll" aria-hidden="true">
+        <span></span> scroll
+      </div>
+    </section>
+
+    <section id="stats" class="stats container">
+      <div class="stat">
+        <span class="stat__num" data-target="1200">0</span><span class="stat__plus">+</span>
+        <p>Vehicles delivered</p>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-target="48">0</span>
+        <p>Countries served</p>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-target="98">0</span><span class="stat__plus">%</span>
+        <p>Client satisfaction</p>
+      </div>
+      <div class="stat">
+        <span class="stat__num" data-target="24">0</span><span class="stat__plus">/7</span>
+        <p>Concierge support</p>
+      </div>
+    </section>
+
+    <section id="collection" class="collection">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">The collection</p>
+          <h2>Engineered to be remembered.</h2>
+        </header>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card__art card__art--1" aria-hidden="true"></div>
+            <div class="card__body">
+              <p class="card__tag">Electric · GT</p>
+              <h3>Aurora 02</h3>
+              <p class="card__desc">Silent torque, 540 km range, and a cabin you'll want to live in.</p>
+              <div class="card__meta">
+                <span>0–100 km/h · 2.8s</span>
+                <span class="card__price">from €148,000</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card card--featured">
+            <div class="card__art card__art--2" aria-hidden="true"></div>
+            <div class="card__body">
+              <p class="card__tag">Coupé · Limited</p>
+              <h3>Tempest R</h3>
+              <p class="card__desc">A naturally aspirated farewell — only 199 ever built.</p>
+              <div class="card__meta">
+                <span>620 hp · manual</span>
+                <span class="card__price">from €312,000</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card__art card__art--3" aria-hidden="true"></div>
+            <div class="card__body">
+              <p class="card__tag">SUV · Hybrid</p>
+              <h3>Solace XR</h3>
+              <p class="card__desc">A family vehicle that doesn't apologize for itself.</p>
+              <div class="card__meta">
+                <span>7 seats · AWD</span>
+                <span class="card__price">from €92,500</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="features">
+      <div class="container">
+        <header class="section-head">
+          <p class="eyebrow">The Avto difference</p>
+          <h2>White-glove from inquiry to keys.</h2>
+        </header>
+
+        <div class="feature-grid">
+          <div class="feature">
+            <div class="feature__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 12h3l2-7h8l2 7h3v7H3z"/><circle cx="7" cy="17" r="1.5"/><circle cx="17" cy="17" r="1.5"/>
+              </svg>
+            </div>
+            <h3>Hand-inspected</h3>
+            <p>Every vehicle passes a 213-point inspection by our master technicians before listing.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <h3>Title-guaranteed</h3>
+            <p>Full provenance, escrow, and ownership transfer handled by our in-house counsel.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M3 7h18M3 12h18M3 17h12"/>
+              </svg>
+            </div>
+            <h3>Global delivery</h3>
+            <p>Enclosed transport to 48 countries with real-time tracking and climate control.</p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+              </svg>
+            </div>
+            <h3>Always on</h3>
+            <p>A dedicated concierge available 24/7 — one number, one person, no menus.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="cta">
+      <div class="container cta__inner">
+        <h2>Ready to find yours?</h2>
+        <p>Tell us what you're looking for. We'll respond within the hour.</p>
+        <form class="cta__form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Sent ✓'; this.querySelector('button').disabled=true;">
+          <input type="email" required placeholder="you@domain.com" aria-label="Email address" />
+          <button type="submit" class="btn btn--primary">Get in touch</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <span class="nav__mark">A</span>
+        <span class="nav__word">avto</span>
+      </div>
+      <p>© <span id="year"></span> Avto Motors. Crafted with care.</p>
+      <div class="footer__links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Press</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
