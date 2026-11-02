@@ -1,0 +1,468 @@
+@import "tailwindcss";
+
+/*
+ * Oblikovni sistem GradimoCamper.
+ * Barve, pisava, polmeri in sence so definirani kot žetoni spodaj.
+ * Za spremembo barve popravi vrednost tukaj; uporablja se povsod.
+ */
+@theme {
+  /* Ozadja */
+  --color-paper: #faf7f1; /* topla bela, glavno ozadje */
+  --color-paper-raised: #fffdf9; /* kartica obrazca */
+  --color-sand-50: #f4eee4;
+  --color-sand-100: #ece4d6;
+  --color-sand-200: #e4dbcb; /* tanke obrobe */
+  --color-sand-300: #d9cfbd; /* ločilne črte */
+  --color-sand-photo: #957c5d; /* ozadje bež fotografije */
+
+  /* Besedilo */
+  --color-ink: #1d1c17; /* skoraj črna */
+  --color-ink-muted: #5c5848; /* 6,7 : 1 na topli beli */
+
+  /* Olivna */
+  --color-olive: #555229;
+  --color-olive-deep: #434124; /* ozadje glavne fotografije */
+  --color-olive-200: #c9c3a6;
+
+  /* Glavno dejanje */
+  --color-action: #a8441e; /* 6,0 : 1 z belim besedilom */
+  --color-action-hover: #8f3816;
+
+  /* Obrazci in stanja */
+  --color-field-border: #8c8676; /* 3,6 : 1 na beli */
+  --color-error: #b42318;
+  --color-error-bg: #fbefec;
+  --color-success: #3f5a1f;
+  --color-success-bg: #eef2e3;
+
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --radius-panel: 1.75rem;
+  --shadow-card: 0 1px 2px rgb(29 28 23 / 0.04), 0 12px 32px -18px rgb(29 28 23 / 0.18);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  :root {
+    --focus-ring: var(--color-ink);
+  }
+
+  .dark-surface {
+    --focus-ring: var(--color-paper);
+  }
+
+  .light-surface {
+    --focus-ring: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: #e6dbc4;
+    color: var(--color-ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  @media (min-width: 40rem) {
+    .container-page {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Tipografija */
+  .display-1 {
+    font-size: clamp(2.125rem, 1.35rem + 3.9vw, 4.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .display-2 {
+    font-size: clamp(1.875rem, 1.35rem + 2.3vw, 3.25rem);
+    line-height: 1.06;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  .dark-surface .display-2 {
+    color: var(--color-paper);
+  }
+
+  .lead {
+    font-size: clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+    text-wrap: pretty;
+  }
+
+  .body-muted {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--color-ink-muted);
+    text-wrap: pretty;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-olive);
+  }
+
+  .eyebrow-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background-color: var(--color-action);
+  }
+
+  /* Povezave */
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition: color 150ms ease, background-color 150ms ease;
+  }
+
+  .nav-link:hover {
+    background-color: var(--color-sand-100);
+  }
+
+  .text-link {
+    font-weight: 600;
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-color: var(--color-olive-200);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms ease;
+  }
+
+  .text-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 150ms ease;
+  }
+
+  .footer-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Gumbi */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    background-color: var(--color-action);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 150ms ease, transform 150ms ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-action-hover);
+  }
+
+  .btn-primary:active {
+    transform: translateY(1px);
+  }
+
+  .btn-primary[aria-disabled="true"] {
+    cursor: progress;
+    opacity: 0.85;
+  }
+
+  .btn-small {
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 23.4375rem) {
+    .btn-small {
+      padding-inline: 0.8125rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .btn-small {
+      padding-inline: 1.25rem;
+      font-size: 0.9375rem;
+    }
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.125rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-sand-300);
+    background-color: var(--color-paper-raised);
+    color: var(--color-ink);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--color-field-border);
+    background-color: var(--color-sand-50);
+  }
+
+  /* Obrazec */
+  .form-card {
+    border: 1px solid var(--color-sand-200);
+    border-radius: 1.5rem;
+    background-color: var(--color-paper-raised);
+    box-shadow: var(--shadow-card);
+    padding: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .form-card {
+      padding: 1.75rem;
+    }
+  }
+
+  .field-input {
+    display: block;
+    width: 100%;
+    min-height: 3.25rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-field-border);
+    border-radius: 0.875rem;
+    background-color: #fff;
+    color: var(--color-ink);
+    font-size: 1.0625rem; /* ≥ 16 px: brez povečave na iOS */
+    line-height: 1.4;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .field-input::placeholder {
+    color: #8a8574;
+    opacity: 1;
+  }
+
+  .field-input:hover {
+    border-color: var(--color-ink-muted);
+  }
+
+  .field-input:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 1px;
+    border-color: var(--color-ink);
+  }
+
+  .field-input[aria-invalid="true"] {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 1px var(--color-error);
+  }
+
+  .field-error {
+    display: flex;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--color-error);
+  }
+
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    min-height: 2.75rem;
+    padding-block: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+
+  .check-input {
+    flex-shrink: 0;
+    width: 1.375rem;
+    height: 1.375rem;
+    margin: 0;
+    margin-top: 0.05rem;
+    accent-color: var(--color-olive);
+    cursor: pointer;
+  }
+
+  .check-input[aria-invalid="true"] {
+    outline: 2px solid var(--color-error);
+    outline-offset: 2px;
+  }
+
+  .check-input:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  .check-tag {
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+  }
+
+  /* Past za robote: izven zaslona, ne display:none. */
+  .hp-field {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  /* Fotografije */
+  .photo-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    padding: 1.5rem;
+  }
+
+  /* Vrstica dveh fotografij z enako višino (razmerji iz dimenzij slik). */
+  .story-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .story-grid {
+      flex-direction: row;
+      gap: 1.25rem;
+    }
+
+    .story-grid > :first-child {
+      flex: var(--front-ratio) 1 0%;
+    }
+
+    .story-grid > :last-child {
+      flex: var(--side-ratio) 1 0%;
+    }
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.3125rem 0.75rem;
+    border: 1px solid var(--color-sand-300);
+    border-radius: 999px;
+    background-color: var(--color-paper-raised);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-olive);
+    white-space: nowrap;
+  }
+
+  .status-pill::before {
+    content: "";
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 999px;
+    background-color: currentColor;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background-color: var(--color-ink);
+    color: var(--color-paper);
+    font-weight: 600;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+}
