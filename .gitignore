@@ -216,3 +216,40 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ---------------------------------------------------------------------------
+# GradimoCamper (Next.js)
+# ---------------------------------------------------------------------------
+
+# Mapa lib/ projekta je izvorna koda (zgornji vzorec iz predloge za Python
+# jo sicer izključi).
+!/lib/
+
+# odvisnosti
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# okoljske datoteke s skrivnostmi (primer .env.example ostane v Gitu)
+.env*
+!.env.example
+
+# Vercel in Supabase CLI
+.vercel
+supabase/.temp/
+supabase/.branches/
+
+# testi
+/test-results/
+/playwright-report/
+
+# razno
+.DS_Store
+*.pem
+npm-debug.log*
