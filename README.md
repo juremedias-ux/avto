@@ -58,8 +58,8 @@ components/               gradniki (logotip, obrazec, odseki, administracija)
 lib/                      validacija, podatkovni sloj, avtentikacija, omejevanje zahtev, CSV
 content.ts                ime znamke, besedila, kontakt, podatki upravljavca, slike
 app/globals.css           oblikovni žetoni (barve, pisava, razmiki) in skupni slogi
-public/images/            slike za splet (fotografije vozil niso v Gitu, glej 9)
-assets/izvirne-priloge/   nespremenjene izvirne priložene slike (niso v Gitu, glej 9)
+public/images/            slike za splet
+assets/izvirne-priloge/   nespremenjene izvirne priložene slike
 supabase/migrations/      migracije baze
 proxy.ts                  osvežitev seje za /admin
 tests/                    enotski testi (Vitest)
@@ -240,9 +240,7 @@ Izvirne priložene slike so nespremenjene v `assets/izvirne-priloge/`. Za splet 
 
 Logotipi in oznake na vozilih niso odstranjeni. Slike so majhne ločljivosti (pribl. 460 px širine), zato so prikazane največ v izvirni širini, da ne postanejo neostre.
 
-> **Slike vozil niso v Gitu.** Repozitorij je javen, zato so fotografije do potrditve pravic izključene v `.gitignore` (`/public/images/*.png`, `/assets/izvirne-priloge/`). Kdor projekt prenese z GitHuba, mora slike dodati sam; brez njih se stran zgradi in deluje, namesto fotografij pa se prikažejo opisi (`alt`). Ko so pravice urejene, odstrani ti vrstici iz `.gitignore` in slike dodaj v Git.
->
-> Spletne kopije iz izvirnikov ponoviš tako: `4-…png` obreži za zgornji 2 vrstici, `1-…png` za levih 8 px, `2-…png` uporabi nespremenjeno; shrani pod imeni iz tabele.
+Spletne kopije iz izvirnikov ponoviš tako: `4-…png` obreži za zgornji 2 vrstici, `1-…png` za levih 8 px, `2-…png` uporabi nespremenjeno; shrani pod imeni iz tabele.
 
 **Zamenjava slike:**
 
@@ -251,7 +249,7 @@ Logotipi in oznake na vozilih niso odstranjeni. Slike so majhne ločljivosti (pr
 3. Barvo ozadja določiš npr. s kapalko v programu za urejanje slik (vrednost `#rrggbb`).
 4. `npm test` preveri, ali se mere v `content.ts` ujemajo z datotekami PNG.
 
-**Pravice za javno uporabo:** na slikah 3 in 4 je viden napis BÜRSTNER, na sliki 1 napis SIGNATURE. Priložena datoteka ni dokaz dovoljenja za javno uporabo. Pred objavo pridobi pisno dovoljenje imetnika pravic ali slike zamenjaj z lastnimi (glej [16](#16-odprte-naloge-pred-javno-objavo)). Stran pod slikami navaja, da so fotografije simbolične in vozila niso izdelki ali predelave GradimoCamper.
+**Pravice za javno uporabo:** na slikah 3 in 4 je viden napis BÜRSTNER, na sliki 1 napis SIGNATURE. Dovoljenje imetnika pravic ni preverjeno. Fotografije so po odločitvi lastnika objavljene v javnem repozitoriju brez predhodnega preverjanja pravic; tveganje glede avtorskih pravic in znamk ostaja odprto (glej [16](#16-odprte-naloge-pred-javno-objavo)). Stran pod slikami navaja, da so fotografije simbolične in vozila niso izdelki ali predelave GradimoCamper.
 
 ---
 
@@ -362,7 +360,6 @@ select cron.schedule('gradimocamper-ciscenje-stevcev', '*/15 * * * *',
 
 Javno objavo **preprečujejo**:
 
-- [ ] **Pravice za slike:** pisno dovoljenje za javno uporabo vseh treh fotografij (vidne oznake BÜRSTNER in SIGNATURE) ali zamenjava z lastnimi fotografijami. Nato slike dodaj v Git oziroma na gostovanje (glej [9](#9-dodajanje-in-zamenjava-priloženih-datotek)).
 - [ ] **Podatki upravljavca in kontakt** v `content.ts` (`controller`, `contact`).
 - [ ] **Politika zasebnosti:** dopolnitev vseh mest `[DOPOLNI: …]` in pravni pregled.
 - [ ] **Izbira gostovanja** glede na pogoje poslovne rabe (Vercel Hobby ni namenjen poslovni rabi).
@@ -374,6 +371,10 @@ Ob objavi:
 - [ ] Preizkus na objavljeni strani: prijava (oba obrazca), administracija, izvoz, preklic, izbris.
 - [ ] `ALLOW_INDEXING=true`, ko je stran pripravljena za iskalnike.
 - [ ] Načrt rednih varnostnih kopij in odziva na zahteve posameznikov.
+
+Odprto tveganje (po odločitvi lastnika ne ustavlja objave):
+
+- [ ] **Pravice za slike:** dovoljenje za javno uporabo treh fotografij (vidne oznake BÜRSTNER in SIGNATURE) ni preverjeno. Fotografije so že v javnem repozitoriju. Če imetnik pravic ugovarja, jih zamenjaj z lastnimi (glej [9](#9-dodajanje-in-zamenjava-priloženih-datotek)); odstranitev iz zgodovine Gita zahteva prepis zgodovine.
 
 Pozneje (ni v tej različici): potrditveno sporočilo (double opt-in), storitev za pošiljanje z odjavo, samodejni preklic prek povezave.
 
