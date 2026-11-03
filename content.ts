@@ -20,22 +20,34 @@ export const brand = {
 
 /**
  * Kontakt za javni prikaz (noga, politika zasebnosti).
- * Pusti prazno, dokler naslov ni dejansko nastavljen.
+ * Prazna polja se ne prikažejo.
  */
 export const contact = {
   email: "",
+  /** Telefonska številka za prikaz. */
+  phone: "041 883 487",
+  /** Ista številka v mednarodni obliki za povezavo tel:. */
+  phoneHref: "+38641883487",
 };
 
 /**
  * Podatki upravljavca osebnih podatkov za politiko zasebnosti.
- * Prazna polja se na strani prikažejo kot jasno označena manjkajoča mesta.
- * Brez teh podatkov strani ni primerno javno objaviti.
+ * Naslov in matična številka se prikažeta samo, če sta izpolnjena.
  */
 export const controller = {
-  name: "",
+  name: "Gradimo Camper",
   address: "",
   registrationNumber: "",
   email: "",
+};
+
+/**
+ * Lokacija baze Supabase za politiko zasebnosti (npr. "EU – Frankfurt").
+ * Regijo vidiš v nastavitvah projekta Supabase. Dokler je prazno, je na
+ * strani označeno mesto za dopolnitev.
+ */
+export const dataLocation = {
+  supabaseRegion: "",
 };
 
 export const nav = {
@@ -177,6 +189,9 @@ export const images = {
 
 export const privacyPage = {
   title: "Politika zasebnosti",
-  draftNotice:
-    "Osnutek. Besedilo še ni pravno pregledano in ni dokončno. Označena mesta je treba dopolniti pred javno objavo strani.",
+  /** Datum zadnje spremembe besedila politike. */
+  updated: "3. 11. 2026",
+  /** Po pravnem pregledu nastavi na true; obvestilo spodaj se skrije. */
+  legallyReviewed: false,
+  reviewNotice: "Besedilo še ni pravno pregledano.",
 };

@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { brand, consent, contact, controller, privacyPage } from "@/content";
+import { brand, consent, contact, controller, dataLocation, privacyPage } from "@/content";
 import { RATE_LIMITS } from "@/lib/rate-limit";
 
 export const metadata: Metadata = {
   title: privacyPage.title,
-  description: `Osnutek politike zasebnosti za prijavo na obvestilo ob zagonu ${brand.name}.`,
+  description: `Politika zasebnosti za prijavo na obvestilo ob zagonu ${brand.name}.`,
   alternates: { canonical: "/zasebnost" },
 };
 
@@ -18,10 +18,6 @@ function Missing({ children }: { children: ReactNode }) {
       [DOPOLNI: {children}]
     </mark>
   );
-}
-
-function Value({ value, label }: { value: string; label: string }) {
-  return value ? <>{value}</> : <Missing>{label}</Missing>;
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -35,9 +31,42 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+/** Kontaktni podatki upravljavca (telefon in/ali e-pošta). */
+function ContactDetails() {
+  const email = controller.email || contact.email;
+  const items: ReactNode[] = [];
+  if (contact.phone) {
+    items.push(
+      <a key="tel" href={`tel:${contact.phoneHref}`} className="text-link">
+        {contact.phone}
+      </a>,
+    );
+  }
+  if (email) {
+    items.push(
+      <a key="mail" href={`mailto:${email}`} className="text-link">
+        {email}
+      </a>,
+    );
+  }
+  if (items.length === 0) return <Missing>kontakt upravljavca</Missing>;
+  return (
+    <>
+      {items.map((item, index) => (
+        <span key={index}>
+          {index > 0 ? " ali " : null}
+          {item}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export default function PrivacyPage() {
-  const contactEmail = controller.email || contact.email;
   const minutes = (seconds: number) => Math.round(seconds / 60);
+  const contactMethod = contact.phone
+    ? "pokliči ali pošlji sporočilo SMS na številko"
+    : "piši na";
 
   return (
     <>
@@ -45,30 +74,34 @@ export default function PrivacyPage() {
       <main id="vsebina" tabIndex={-1} className="container-page py-14 outline-none sm:py-20">
         <div className="mx-auto max-w-[44rem]">
           <h1 className="display-2">{privacyPage.title}</h1>
-          <p
-            role="note"
-            className="mt-6 rounded-2xl border border-[#e8c98f] bg-[#fdf4e3] px-5 py-4 text-[0.9375rem] font-medium leading-relaxed text-ink"
-          >
-            {privacyPage.draftNotice}
-          </p>
+          <p className="mt-4 text-[0.9375rem] text-ink-muted">Zadnja sprememba: {privacyPage.updated}</p>
+          {privacyPage.legallyReviewed ? null : (
+            <p
+              role="note"
+              className="mt-6 rounded-2xl border border-[#e8c98f] bg-[#fdf4e3] px-5 py-4 text-[0.9375rem] font-medium leading-relaxed text-ink"
+            >
+              {privacyPage.reviewNotice}
+            </p>
+          )}
 
           <div className="mt-10">
             <Section title="1. Upravljavec in kontakt">
               <p>
-                Upravljavec osebnih podatkov: <Value value={controller.name} label="ime oziroma naziv upravljavca" />
+                Upravljavec osebnih podatkov: <strong>{controller.name || <Missing>naziv upravljavca</Missing>}</strong>
+                {controller.address ? (
+                  <>
+                    <br />
+                    Naslov: {controller.address}
+                  </>
+                ) : null}
+                {controller.registrationNumber ? (
+                  <>
+                    <br />
+                    Matična številka: {controller.registrationNumber}
+                  </>
+                ) : null}
                 <br />
-                Naslov: <Value value={controller.address} label="naslov upravljavca" />
-                <br />
-                Matična številka: <Value value={controller.registrationNumber} label="matična številka, če obstaja" />
-                <br />
-                Kontakt za vprašanja o zasebnosti, preklic in izbris:{" "}
-                {contactEmail ? (
-                  <a href={`mailto:${contactEmail}`} className="text-link">
-                    {contactEmail}
-                  </a>
-                ) : (
-                  <Missing>kontaktni e-poštni naslov</Missing>
-                )}
+                Kontakt za vprašanja o zasebnosti, preklic privolitve in izbris: <ContactDetails />
               </p>
             </Section>
 
@@ -92,6 +125,11 @@ export default function PrivacyPage() {
                   (pri prijavi lastnika v administracijo {minutes(RATE_LIMITS.adminLogin.windowSeconds)} minut);
                   potekli zapisi se samodejno izbrišejo ob naslednji oddaji obrazca.
                 </li>
+                <li>
+                  <strong>Tehnični podatki zahtev</strong>: ponudnik gostovanja pri dostavi strani obdeluje tehnične
+                  podatke, kot je IP-naslov, v skladu s svojimi pogoji. Aplikacija GradimoCamper teh podatkov ne
+                  shranjuje.
+                </li>
               </ul>
               <p>
                 Imena, telefonske številke ali drugih podatkov ne zbiramo. Uporabniškega računa za obiskovalce ni.
@@ -101,57 +139,73 @@ export default function PrivacyPage() {
             <Section title="3. Nameni in pravna podlaga">
               <ul>
                 <li>
-                  <strong>Obvestilo ob zagonu platforme</strong> – na podlagi tvoje privolitve: »{consent.launch}«
+                  <strong>Obvestilo ob zagonu platforme</strong> – na podlagi tvoje privolitve (točka (a) prvega
+                  odstavka 6. člena Splošne uredbe o varstvu podatkov): »{consent.launch}«
                 </li>
                 <li>
                   <strong>Praktični nasveti, novice in občasne ponudbe</strong> – samo, če je bila zanje dana
-                  ločena, neobvezna privolitev: »{consent.newsletter}«
+                  ločena, neobvezna privolitev (točka (a) prvega odstavka 6. člena Splošne uredbe o varstvu
+                  podatkov): »{consent.newsletter}«
                 </li>
                 <li>
-                  <strong>Zaščita obrazca pred zlorabami</strong> –{" "}
-                  <Missing>pravna podlaga (predlog: zakoniti interes), preveri s pravnim svetovalcem</Missing>
+                  <strong>Zaščita obrazca pred zlorabami</strong> – na podlagi zakonitega interesa upravljavca
+                  (točka (f) prvega odstavka 6. člena Splošne uredbe o varstvu podatkov), da obrazec in bazo zaščiti
+                  pred samodejnimi in množičnimi oddajami.
                 </li>
               </ul>
               <p>
                 Naslovov ne posredujemo partnerjem ali drugim podjetjem za njihovo samostojno trženje.
               </p>
               <p>
-                Lastništvo e-poštnega naslova trenutno ne preverjamo s potrditvenim sporočilom. Če je kdo vpisal
-                tvoj naslov brez tvoje vednosti, nam piši in naslov bomo izbrisali.
+                Lastništva e-poštnega naslova trenutno ne preverjamo s potrditvenim sporočilom. Če je kdo vpisal
+                tvoj naslov brez tvoje vednosti, nam to sporoči (točka 1) in naslov bomo izbrisali.
               </p>
             </Section>
 
             <Section title="4. Obdelovalci (ponudniki storitev)">
+              <p>Podatke za nas obdelujeta ponudnika storitev:</p>
               <ul>
                 <li>
-                  <strong>Supabase</strong> – podatkovna baza in prijava lastnika v administracijo.{" "}
-                  <Missing>izbrana regija strežnikov in sklenjena pogodba o obdelavi (DPA)</Missing>
+                  <strong>Supabase</strong> – podatkovna baza s prijavami in prijava lastnika v administracijo.
+                  Lokacija baze:{" "}
+                  {dataLocation.supabaseRegion || <Missing>regija projekta Supabase</Missing>}.
                 </li>
                 <li>
-                  <strong>Ponudnik gostovanja spletne strani</strong> –{" "}
-                  <Missing>ime ponudnika (npr. Vercel), regija in pogodba o obdelavi (DPA)</Missing>
+                  <strong>Vercel</strong> – gostovanje spletne strani in izvajanje strežniške kode, ki obdela oddani
+                  obrazec.
+                </li>
+              </ul>
+              <p>
+                Ponudnika obdelujeta podatke po naročilu upravljavca na podlagi pogodbe o obdelavi osebnih podatkov
+                in jih ne smeta uporabljati za lastne namene.
+              </p>
+            </Section>
+
+            <Section title="5. Rok hrambe">
+              <ul>
+                <li>
+                  <strong>Obvestilo ob zagonu</strong>: do zagona platforme in poslanega obvestila. Prijave brez
+                  aktivne privolitve za novice izbrišemo najpozneje 30 dni po poslanem obvestilu.
+                </li>
+                <li>
+                  <strong>Nasveti, novice in ponudbe</strong>: do preklica privolitve.
+                </li>
+                <li>
+                  <strong>Po preklicu</strong>: ko prijava nima več nobene aktivne privolitve, jo izbrišemo
+                  najpozneje v 30 dneh.
+                </li>
+                <li>
+                  <strong>Podatki za zaščito pred zlorabami</strong>: kot je navedeno v točki 2.
                 </li>
               </ul>
             </Section>
 
-            <Section title="5. Rok hrambe">
-              <p>
-                <Missing>
-                  rok hrambe e-poštnih naslovov in privolitev (npr. do preklica oziroma določen čas po zagonu)
-                </Missing>
-              </p>
-              <p>
-                Podatki za zaščito pred zlorabami se izbrišejo samodejno, ko poteče časovno okno iz točke 2 in je
-                oddan naslednji obrazec. <Missing>po potrebi dodaj redno brisanje (glej README, razdelek o hrambi)</Missing>
-              </p>
-            </Section>
-
             <Section title="6. Prenos podatkov v tretje države">
               <p>
-                <Missing>
-                  ali se podatki prenašajo izven EU/EGP (odvisno od izbranih ponudnikov in regij) in na kateri
-                  podlagi
-                </Missing>
+                Če ponudnika iz točke 4 ali njuni podobdelovalci obdelujejo podatke zunaj Evropske unije oziroma
+                Evropskega gospodarskega prostora, se prenos izvaja na podlagi ustreznih zaščitnih ukrepov iz
+                46. člena Splošne uredbe o varstvu podatkov, zlasti standardnih pogodbenih klavzul Evropske
+                komisije, ki so del pogodb o obdelavi podatkov teh ponudnikov.
               </p>
             </Section>
 
@@ -162,23 +216,20 @@ export default function PrivacyPage() {
                 obdelave pred preklicem.
               </p>
               <p>
-                Pritožbo lahko vložiš pri nadzornem organu; v Sloveniji je to Informacijski pooblaščenec.{" "}
-                <Missing>preveri in dopolni kontaktne podatke nadzornega organa</Missing>
+                Pritožbo lahko vložiš pri nadzornem organu. V Sloveniji je to Informacijski pooblaščenec,{" "}
+                <a href="https://www.ip-rs.si" className="text-link" rel="noopener noreferrer">
+                  www.ip-rs.si
+                </a>
+                .
               </p>
             </Section>
 
             <Section title="8. Preklic privolitve in izbris">
               <p>
-                Privolitvi za obvestilo ob zagonu in za novice lahko prekličeš ločeno. Pošlji sporočilo na{" "}
-                {contactEmail ? (
-                  <a href={`mailto:${contactEmail}`} className="text-link">
-                    {contactEmail}
-                  </a>
-                ) : (
-                  <Missing>kontaktni e-poštni naslov</Missing>
-                )}{" "}
-                in navedi, katero privolitev prekličeš ali da želiš izbris vseh podatkov. Zahtevo izvedemo
-                ročno v administraciji. <Missing>rok odziva na zahtevo</Missing>
+                Privolitvi za obvestilo ob zagonu in za novice lahko prekličeš ločeno. Za preklic ali izbris{" "}
+                {contactMethod} <ContactDetails /> in navedi e-poštni naslov iz prijave ter katero privolitev
+                prekličeš oziroma da želiš izbris vseh podatkov. Zahtevo izvedemo ročno v
+                administraciji brez nepotrebnega odlašanja, najpozneje v enem mesecu od prejema.
               </p>
             </Section>
 
@@ -195,7 +246,8 @@ export default function PrivacyPage() {
 
             <Section title="10. Spremembe">
               <p>
-                Datum zadnje spremembe: <Missing>datum objave</Missing>
+                O bistvenih spremembah te politike bomo obvestili na tej strani. Datum zadnje spremembe:{" "}
+                {privacyPage.updated}.
               </p>
             </Section>
           </div>

@@ -2,7 +2,7 @@
 
 Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombijev v camperje. Obiskovalec se prijavi na obvestilo ob zagonu; prijave se shranijo v bazo Supabase; lastnik jih pregleduje v zasebni administraciji na `/admin`.
 
-**Stanje:** prva različica, pripravljena za nastavitev in preverjanje. Stran **še ni objavljena**. Pred javno objavo glej [16. Odprte naloge pred javno objavo](#16-odprte-naloge-pred-javno-objavo).
+**Stanje:** prva različica, pripravljena za nastavitev in preverjanje. Gostovanje: Vercel (ekipa `gradimo-camper`), baza: Supabase (projekt `rplgjmogsajzzfkohxwy`). Stran **še ni objavljena**. Pred javno objavo glej [16. Odprte naloge pred javno objavo](#16-odprte-naloge-pred-javno-objavo).
 
 ---
 
@@ -38,7 +38,7 @@ Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombi
 | Javna stran `/` | Prvi zaslon s prijavo, »Kaj pripravljamo«, vizualna zgodba, pogosta vprašanja, zaključna prijava, noga. |
 | Prijavni obrazec | En gradnik (`components/WaitlistForm.tsx`) z eno strežniško akcijo (`app/actions/waitlist.ts`), prikazan dvakrat z različnimi HTML-identifikatorji. Deluje tudi brez JavaScripta. |
 | Privolitvi | Obvezna (obvestilo ob zagonu) in neobvezna (nasveti, novice, ponudbe), obe privzeto neoznačeni, shranjeni ločeno s časom in različico besedila. |
-| Politika zasebnosti `/zasebnost` | Osnutek z rumeno označenimi mesti `[DOPOLNI: …]`. |
+| Politika zasebnosti `/zasebnost` | Dopolnjeno besedilo; odprto je samo mesto za regijo baze (`[DOPOLNI: …]`). Pravno ni pregledano. |
 | Administracija `/admin` | Prijava lastnika (Supabase Auth), povzetek, tabela, iskanje, straničenje, razvrščanje, CSV-izvoz, preklic privolitve, trajni izbris. |
 | Baza | `supabase/migrations/20261102120000_waitlist.sql` |
 
@@ -83,7 +83,7 @@ Možnosti:
 1. **Netlify Free** (najpreprostejša brezplačna alternativa). Netlify v [objavi brezplačnega paketa](https://www.netlify.com/blog/introducing-netlify-free-plan) navaja, da je namenjen tudi komercialnim projektom; Next.js 16 podpira prek svojega adapterja ([obvestilo](https://www.netlify.com/changelog/next-js-16-deploy-on-netlify/)). Pred uporabo preveri razdelek »Free Usage Tier« v [pogodbi Netlify](https://www.netlify.com/legal/self-serve-subscription-agreement). Naslov bo `ime.netlify.app` (ne `vercel.app`).
 2. **Vercel Pro** (plačljivo). Ohrani naslov `gradimocamper.vercel.app`, vendar je plačljiv. Ne uvajamo ga brez tvoje potrditve.
 
-Koda je pripravljena za Vercel in deluje tudi na Netlifyju (glej [12](#12-priprava-in-objava-na-gostovanju)). **Izbira gostovanja je tvoja odločitev.**
+**Izbrano gostovanje:** Vercel, ekipa [`gradimo-camper`](https://vercel.com/gradimo-camper) (odločitev lastnika). Paket ekipe ni bil preverjen. Če je ekipa na paketu Hobby, zanjo velja zgornja omejitev nekomercialne rabe. Koda deluje tudi na Netlifyju (glej [12](#12-priprava-in-objava-na-gostovanju)).
 
 ### Supabase Free
 
@@ -118,7 +118,12 @@ Stran je na `http://localhost:3000`. Lokalni razvoj ne potrebuje produkcijskega 
 
 ## 2. Nastavitev Supabase
 
-1. Ustvari račun in nov projekt na [supabase.com](https://supabase.com). Za regijo izberi EU (npr. Frankfurt), če je na voljo, in si jo zapiši za politiko zasebnosti.
+Uporablja se projekt Supabase **`rplgjmogsajzzfkohxwy`**:
+
+- naslov API: `https://rplgjmogsajzzfkohxwy.supabase.co` (vrednost za `SUPABASE_URL`),
+- nadzorna plošča: <https://supabase.com/dashboard/project/rplgjmogsajzzfkohxwy>.
+
+1. Odpri projekt v nadzorni plošči. Regijo projekta (prikazana v nastavitvah projekta) vpiši v `content.ts` → `dataLocation.supabaseRegion` (npr. `"EU – Frankfurt"`); prikaže se v politiki zasebnosti.
 2. **Izklopi javno registracijo:** Authentication → Sign In / Providers → izklopi »Allow new users to sign up«. Ponudnik »Email« naj ostane vklopljen (prijava z e-pošto in geslom). *(Imena menijev se lahko sčasoma spremenijo.)*
 3. Izvedi migracijo (glej [3](#3-izvedba-migracij)).
 4. Ustvari lastniški račun (glej [5](#5-ustvarjanje-lastniškega-računa)).
@@ -132,7 +137,7 @@ Migracija ustvari tabelo `public.waitlist`, zasebno shemo `private` s kratkotraj
 
 **Najpreprosteje (brez dodatnih orodij):**
 
-1. Supabase → SQL Editor → New query.
+1. Odpri SQL Editor projekta: <https://supabase.com/dashboard/project/rplgjmogsajzzfkohxwy/sql/new>.
 2. Kopiraj celotno vsebino datoteke `supabase/migrations/20261102120000_waitlist.sql`.
 3. Klikni »Run«. Rezultat mora biti brez napak.
 
@@ -143,7 +148,7 @@ npx supabase login
 ```
 
 ```bash
-npx supabase link --project-ref <ref-projekta>
+npx supabase link --project-ref rplgjmogsajzzfkohxwy
 ```
 
 ```bash
@@ -265,21 +270,26 @@ Spletne kopije iz izvirnikov ponoviš tako: `4-…png` obreži za zgornji 2 vrst
 
 ## 11. Podatki upravljavca in kontakt
 
-V `content.ts`:
+Nastavljeno v `content.ts`:
 
 ```ts
-export const contact = { email: "" };          // javni kontakt (noga)
-export const controller = {                    // politika zasebnosti
-  name: "", address: "", registrationNumber: "", email: "",
-};
+export const contact = { email: "", phone: "041 883 487", phoneHref: "+38641883487" };
+export const controller = { name: "Gradimo Camper", address: "", registrationNumber: "", email: "" };
+export const dataLocation = { supabaseRegion: "" };   // regija baze Supabase
+export const privacyPage = { updated: "3. 11. 2026", legallyReviewed: false, … };
 ```
 
-- Ko je `contact.email` izpolnjen, se kontakt prikaže v nogi.
-- Prazna polja upravljavca so v politiki zasebnosti prikazana kot `[DOPOLNI: …]`.
-- Dopolni še ostala označena mesta na `/zasebnost` (pravna podlaga za zaščito pred zlorabami, obdelovalci in regije, roki hrambe, prenosi v tretje države, rok odziva, datum).
-- Besedilo je osnutek in ni pravni nasvet. Priporočljiv je pregled pravnega strokovnjaka.
+- Telefon se prikaže v nogi in v politiki zasebnosti (povezava `tel:`). E-pošta se prikaže, ko jo izpolniš.
+- Naslov in matična številka upravljavca se prikažeta, ko ju izpolniš.
+- Edino še označeno mesto na `/zasebnost` je regija baze Supabase (`dataLocation.supabaseRegion`).
+- Ob spremembi besedila politike posodobi `privacyPage.updated`.
+- Obvestilo »Besedilo še ni pravno pregledano« izgine, ko nastaviš `legallyReviewed: true`. Besedilo ni pravni nasvet; priporočljiv je pregled pravnega strokovnjaka.
 
-**Manjkajoči podatki upravljavca in kontakt so ovira za javno objavo.**
+**Obveznosti iz politike zasebnosti** (izvajaš jih ročno v administraciji):
+
+- zahteve za preklic ali izbris (prejete po telefonu ali SMS) izvedi najpozneje v enem mesecu;
+- prijave brez aktivne privolitve za novice izbriši najpozneje 30 dni po poslanem obvestilu ob zagonu;
+- prijave, ki po preklicu nimajo nobene aktivne privolitve, izbriši najpozneje v 30 dneh.
 
 ---
 
@@ -295,10 +305,18 @@ npm run check
 
 ### Vercel
 
-1. Na [vercel.com](https://vercel.com) → »Add New… → Project« → uvozi repozitorij z GitHuba.
-2. Ime projekta: `gradimocamper` (glej [13](#13-naslov-gradimocampervercelapp)). Ogrodje se zazna samodejno (Next.js).
-3. Settings → Environment Variables: vnesi spremenljivke iz [4](#4-okoljske-spremenljivke) za okolje **Production**. Za predoglede (Preview) produkcijskih ključev Supabase ne vnašaj ali uporabi ločen testni projekt Supabase, sicer predogledi pišejo v produkcijsko bazo.
-4. »Deploy«. Indeksiranje ostane izklopljeno, dokler ne nastaviš `ALLOW_INDEXING=true`.
+Gostovanje je v ekipi [`gradimo-camper`](https://vercel.com/gradimo-camper).
+
+1. Združi PR z vejo `main` (Vercel privzeto objavlja produkcijo iz `main`).
+2. <https://vercel.com/gradimo-camper> → »Add New… → Project« → uvozi repozitorij `juremedias-ux/avto` z GitHuba (ob prvem uvozu Vercel zahteva dostop do repozitorija).
+3. Ime projekta: `gradimocamper` (glej [13](#13-naslov-gradimocampervercelapp)). Ogrodje se zazna samodejno (Next.js).
+4. Settings → Environment Variables, okolje **Production**:
+   - `NEXT_PUBLIC_SITE_URL` = `https://gradimocamper.vercel.app` (oziroma dejanski naslov projekta),
+   - `SUPABASE_URL` = `https://rplgjmogsajzzfkohxwy.supabase.co`,
+   - `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `ADMIN_USER_ID` (glej [4](#4-okoljske-spremenljivke)–[6](#6-nastavitev-lastniškega-id-ja)).
+
+   Za predoglede (Preview) produkcijskih ključev Supabase ne vnašaj, sicer predogledi pišejo v produkcijsko bazo.
+5. »Deploy«. Indeksiranje ostane izklopljeno, dokler ne nastaviš `ALLOW_INDEXING=true`.
 
 Upoštevaj opozorilo o paketu Hobby v [Stroških](#stroški-in-brezplačni-paketi).
 
@@ -360,11 +378,13 @@ select cron.schedule('gradimocamper-ciscenje-stevcev', '*/15 * * * *',
 
 Javno objavo **preprečujejo**:
 
-- [ ] **Podatki upravljavca in kontakt** v `content.ts` (`controller`, `contact`).
-- [ ] **Politika zasebnosti:** dopolnitev vseh mest `[DOPOLNI: …]` in pravni pregled.
-- [ ] **Izbira gostovanja** glede na pogoje poslovne rabe (Vercel Hobby ni namenjen poslovni rabi).
-- [ ] **Supabase:** migracija, izklopljena javna registracija, lastniški račun, `ADMIN_USER_ID`, spremenljivke okolja na gostovanju.
-- [ ] Preverjen naslov (`gradimocamper.vercel.app` ali drug, ki ga izbereš) v `NEXT_PUBLIC_SITE_URL`.
+- [x] Podatki upravljavca in kontakt (`Gradimo Camper`, 041 883 487).
+- [x] Gostovanje: Vercel, ekipa `gradimo-camper`; projekt Supabase `rplgjmogsajzzfkohxwy`.
+- [ ] **Regija baze Supabase** v `content.ts` → `dataLocation.supabaseRegion`.
+- [ ] **Pogodbi o obdelavi podatkov (DPA)** s Supabase in Vercel: preveri, da sta sprejeti (politika zasebnosti se nanju sklicuje).
+- [ ] **Supabase:** migracija, izklopljena javna registracija, lastniški račun, `ADMIN_USER_ID`.
+- [ ] **Vercel:** uvoz repozitorija, spremenljivke okolja, preverjen naslov v `NEXT_PUBLIC_SITE_URL`.
+- [ ] Priporočeno: pravni pregled politike zasebnosti (nato `legallyReviewed: true`).
 
 Ob objavi:
 

@@ -14,9 +14,17 @@ export function SiteFooter() {
 
           <nav aria-label="Noga">
             <ul className="flex flex-col gap-1 text-[0.9375rem] md:items-end">
-              {contact.email ? (
+              {contact.phone ? (
                 <li>
                   <span className="text-ink-muted">{footer.contactLabel}: </span>
+                  <a href={`tel:${contact.phoneHref}`} className="footer-link">
+                    {contact.phone}
+                  </a>
+                </li>
+              ) : null}
+              {contact.email ? (
+                <li>
+                  {contact.phone ? null : <span className="text-ink-muted">{footer.contactLabel}: </span>}
                   <a href={`mailto:${contact.email}`} className="footer-link">
                     {contact.email}
                   </a>
