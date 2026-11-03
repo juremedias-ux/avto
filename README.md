@@ -38,7 +38,7 @@ Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombi
 | Javna stran `/` | Prvi zaslon s prijavo, »Kaj pripravljamo«, vizualna zgodba, pogosta vprašanja, zaključna prijava, noga. |
 | Prijavni obrazec | En gradnik (`components/WaitlistForm.tsx`) z eno strežniško akcijo (`app/actions/waitlist.ts`), prikazan dvakrat z različnimi HTML-identifikatorji. Deluje tudi brez JavaScripta. |
 | Privolitvi | Obvezna (obvestilo ob zagonu) in neobvezna (nasveti, novice, ponudbe), obe privzeto neoznačeni, shranjeni ločeno s časom in različico besedila. |
-| Politika zasebnosti `/zasebnost` | Dopolnjeno besedilo; odprto je samo mesto za regijo baze (`[DOPOLNI: …]`). Pravno ni pregledano. |
+| Politika zasebnosti `/zasebnost` | Dopolnjeno besedilo brez odprtih mest. Pravno ni pregledano. |
 | Administracija `/admin` | Prijava lastnika (Supabase Auth), povzetek, tabela, iskanje, straničenje, razvrščanje, CSV-izvoz, preklic privolitve, trajni izbris. |
 | Baza | `supabase/migrations/20261102120000_waitlist.sql` |
 
@@ -275,13 +275,13 @@ Nastavljeno v `content.ts`:
 ```ts
 export const contact = { email: "", phone: "041 883 487", phoneHref: "+38641883487" };
 export const controller = { name: "Gradimo Camper", address: "", registrationNumber: "", email: "" };
-export const dataLocation = { supabaseRegion: "" };   // regija baze Supabase
+export const dataLocation = { supabaseRegion: "EU – Irska (AWS eu-west-1)" };
 export const privacyPage = { updated: "3. 11. 2026", legallyReviewed: false, … };
 ```
 
 - Telefon se prikaže v nogi in v politiki zasebnosti (povezava `tel:`). E-pošta se prikaže, ko jo izpolniš.
 - Naslov in matična številka upravljavca se prikažeta, ko ju izpolniš.
-- Edino še označeno mesto na `/zasebnost` je regija baze Supabase (`dataLocation.supabaseRegion`).
+- Regija baze Supabase (`dataLocation.supabaseRegion`) je vpisana; na `/zasebnost` ni več označenih mest `[DOPOLNI: …]`.
 - Ob spremembi besedila politike posodobi `privacyPage.updated`.
 - Obvestilo »Besedilo še ni pravno pregledano« izgine, ko nastaviš `legallyReviewed: true`. Besedilo ni pravni nasvet; priporočljiv je pregled pravnega strokovnjaka.
 
@@ -380,7 +380,7 @@ Javno objavo **preprečujejo**:
 
 - [x] Podatki upravljavca in kontakt (`Gradimo Camper`, 041 883 487).
 - [x] Gostovanje: Vercel, ekipa `gradimo-camper`; projekt Supabase `rplgjmogsajzzfkohxwy`.
-- [ ] **Regija baze Supabase** v `content.ts` → `dataLocation.supabaseRegion`.
+- [x] Regija baze Supabase: EU – Irska (`eu-west-1`).
 - [ ] **Pogodbi o obdelavi podatkov (DPA)** s Supabase in Vercel: preveri, da sta sprejeti (politika zasebnosti se nanju sklicuje).
 - [ ] **Supabase:** migracija, izklopljena javna registracija, lastniški račun, `ADMIN_USER_ID`.
 - [ ] **Vercel:** uvoz repozitorija, spremenljivke okolja, preverjen naslov v `NEXT_PUBLIC_SITE_URL`.

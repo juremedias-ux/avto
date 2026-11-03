@@ -47,7 +47,7 @@ export const controller = {
  * strani označeno mesto za dopolnitev.
  */
 export const dataLocation = {
-  supabaseRegion: "",
+  supabaseRegion: "EU – Irska (AWS eu-west-1)",
 };
 
 export const nav = {
