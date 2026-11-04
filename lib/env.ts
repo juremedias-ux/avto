@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cleanEnvValue, normalizeSupabaseUrl } from "@/lib/supabase/url";
+
 /**
  * Strežniške nastavitve. Nobena od teh vrednosti ne sme imeti predpone
  * NEXT_PUBLIC_, ker bi sicer končala v kodi, ki jo prejme brskalnik.
@@ -12,24 +14,17 @@ export type SupabaseEnv = {
 };
 
 function read(name: string): string | undefined {
-  const value = process.env[name]?.trim();
-  return value ? value : undefined;
+  return cleanEnvValue(process.env[name]);
 }
 
 /** Vrne nastavitve Supabase ali null, če niso popolne. */
 export function getSupabaseEnv(): SupabaseEnv | null {
-  const url = read("SUPABASE_URL");
+  const rawUrl = read("SUPABASE_URL");
   const publishableKey = read("SUPABASE_PUBLISHABLE_KEY");
   const secretKey = read("SUPABASE_SECRET_KEY");
-  if (!url || !publishableKey || !secretKey) return null;
-  try {
-    const parsed = new URL(url);
-    if (parsed.protocol !== "https:" && parsed.hostname !== "localhost" && parsed.hostname !== "127.0.0.1") {
-      return null;
-    }
-  } catch {
-    return null;
-  }
+  if (!rawUrl || !publishableKey || !secretKey) return null;
+  const url = normalizeSupabaseUrl(rawUrl);
+  if (!url) return null;
   return { url, publishableKey, secretKey };
 }
 

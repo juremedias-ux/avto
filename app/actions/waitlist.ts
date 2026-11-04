@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { messages } from "@/content";
 import { CONSENT_TEXT_VERSION } from "@/lib/consent";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { getClientIp, isSameOrigin } from "@/lib/request";
+import { checkPublicOrigin, getClientIp } from "@/lib/request";
 import { addToWaitlist } from "@/lib/waitlist";
 import {
   FIELD,
@@ -33,7 +33,11 @@ export async function subscribeToWaitlist(
 
   try {
     const requestHeaders = await headers();
-    if (!isSameOrigin(requestHeaders)) return failure(messages.saveFailed);
+    const origin = checkPublicOrigin(requestHeaders);
+    if (!origin.ok) {
+      console.warn("[waitlist] zahteva zavrnjena:", origin.reason);
+      return failure(messages.saveFailed);
+    }
 
     // Past za robote: izpolnjeno skrito polje. Odziv je enak uspehu,
     // podatkov pa ne shranimo.

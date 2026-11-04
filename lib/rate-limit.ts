@@ -36,7 +36,10 @@ export async function checkRateLimit(
 ): Promise<RateLimitResult> {
   const supabase = getServiceClient();
   const secret = getRateLimitSecret();
-  if (!supabase || !secret) return "error";
+  if (!supabase || !secret) {
+    console.error("[rate-limit] manjkajo nastavitve SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY ali SUPABASE_SECRET_KEY");
+    return "error";
+  }
 
   const { limit, windowSeconds } = RATE_LIMITS[scope];
   try {
@@ -46,12 +49,17 @@ export async function checkRateLimit(
       p_window_seconds: windowSeconds,
     });
     if (error || typeof data !== "boolean") {
-      console.error("[rate-limit] preverjanje ni uspelo", error?.code ?? "unknown");
+      // Sporočila napak tu ne vsebujejo osebnih podatkov (ključ je psevdonim).
+      console.error(
+        "[rate-limit] preverjanje ni uspelo",
+        error?.code ?? "brez kode",
+        error?.message ?? "nepričakovan odgovor baze",
+      );
       return "error";
     }
     return data ? "allowed" : "limited";
-  } catch {
-    console.error("[rate-limit] povezava z bazo ni uspela");
+  } catch (error) {
+    console.error("[rate-limit] povezava z bazo ni uspela", (error as Error)?.name ?? "napaka");
     return "error";
   }
 }

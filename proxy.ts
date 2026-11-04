@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { adminCookieOptions } from "@/lib/supabase/cookies";
+import { cleanEnvValue, normalizeSupabaseUrl } from "@/lib/supabase/url";
 
 /**
  * Proxy za /admin: osveži sejo Supabase (piškotke) pred izrisom strani.
@@ -10,8 +11,9 @@ import { adminCookieOptions } from "@/lib/supabase/cookies";
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const url = process.env.SUPABASE_URL?.trim();
-  const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY?.trim();
+  const rawUrl = cleanEnvValue(process.env.SUPABASE_URL);
+  const url = rawUrl ? normalizeSupabaseUrl(rawUrl) : null;
+  const publishableKey = cleanEnvValue(process.env.SUPABASE_PUBLISHABLE_KEY);
 
   if (url && publishableKey) {
     const supabase = createServerClient(url, publishableKey, {
