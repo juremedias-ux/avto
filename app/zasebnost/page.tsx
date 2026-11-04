@@ -163,7 +163,7 @@ export default function PrivacyPage() {
             </Section>
 
             <Section title="4. Obdelovalci (ponudniki storitev)">
-              <p>Podatke za nas obdelujeta ponudnika storitev:</p>
+              <p>Podatke za nas obdelujejo ponudniki storitev:</p>
               <ul>
                 <li>
                   <strong>Supabase</strong> – podatkovna baza s prijavami in prijava lastnika v administracijo.
@@ -174,10 +174,14 @@ export default function PrivacyPage() {
                   <strong>Vercel</strong> – gostovanje spletne strani in izvajanje strežniške kode, ki obdela oddani
                   obrazec.
                 </li>
+                <li>
+                  <strong>Google (Gmail)</strong> – e-poštni predal upravljavca, v katerega ob vsaki novi prijavi
+                  prejmemo obvestilo z e-poštnim naslovom, izbranimi privolitvami, obrazcem in časom prijave.
+                </li>
               </ul>
               <p>
-                Ponudnika obdelujeta podatke po naročilu upravljavca na podlagi pogodbe o obdelavi osebnih podatkov
-                in jih ne smeta uporabljati za lastne namene.
+                Ponudniki obdelujejo podatke po naročilu upravljavca na podlagi pogodb in pogojev za obdelavo
+                osebnih podatkov in jih ne smejo uporabljati za lastne namene.
               </p>
             </Section>
 
@@ -191,6 +195,10 @@ export default function PrivacyPage() {
                   <strong>Nasveti, novice in ponudbe</strong>: do preklica privolitve.
                 </li>
                 <li>
+                  <strong>Obvestila o novih prijavah v e-poštnem predalu</strong>: izbrišemo jih skupaj s prijavo
+                  (ob preklicu ali po izteku roka hrambe zgoraj).
+                </li>
+                <li>
                   <strong>Po preklicu</strong>: ko prijava nima več nobene aktivne privolitve, jo izbrišemo
                   najpozneje v 30 dneh.
                 </li>
@@ -202,10 +210,10 @@ export default function PrivacyPage() {
 
             <Section title="6. Prenos podatkov v tretje države">
               <p>
-                Če ponudnika iz točke 4 ali njuni podobdelovalci obdelujejo podatke zunaj Evropske unije oziroma
+                Če ponudniki iz točke 4 ali njihovi podobdelovalci obdelujejo podatke zunaj Evropske unije oziroma
                 Evropskega gospodarskega prostora, se prenos izvaja na podlagi ustreznih zaščitnih ukrepov iz
                 46. člena Splošne uredbe o varstvu podatkov, zlasti standardnih pogodbenih klavzul Evropske
-                komisije, ki so del pogodb o obdelavi podatkov teh ponudnikov.
+                komisije, ki so del pogodb oziroma pogojev za obdelavo podatkov teh ponudnikov.
               </p>
             </Section>
 

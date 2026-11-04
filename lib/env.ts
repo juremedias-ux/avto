@@ -60,3 +60,33 @@ export function getRateLimitSecret(): string | null {
 export function getClientIpHeader(): string {
   return (read("CLIENT_IP_HEADER") ?? "x-forwarded-for").toLowerCase();
 }
+
+export type NotifyEnv = {
+  to: string;
+  from: string;
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+};
+
+/**
+ * Nastavitve za obvestilo lastniku ob novi prijavi (SMTP, npr. Gmail).
+ * Vrne null, če obveščanje ni nastavljeno; prijave se takrat shranjujejo
+ * brez obvestila.
+ */
+export function getNotifyEnv(): NotifyEnv | null {
+  const to = read("NOTIFY_EMAIL_TO");
+  const user = read("SMTP_USER");
+  const password = read("SMTP_PASSWORD");
+  if (!to || !user || !password) return null;
+  const port = Number.parseInt(read("SMTP_PORT") ?? "465", 10);
+  return {
+    to,
+    from: read("NOTIFY_EMAIL_FROM") ?? user,
+    host: read("SMTP_HOST") ?? "smtp.gmail.com",
+    port: Number.isFinite(port) && port > 0 ? port : 465,
+    user,
+    password,
+  };
+}

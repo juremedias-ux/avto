@@ -41,18 +41,22 @@ function logDbError(operation: string, code: string | undefined) {
  * obstaja (INSERT ... ON CONFLICT DO NOTHING v funkciji
  * public.waitlist_subscribe). Enolična omejitev v bazi prepreči dvojnike
  * tudi pri sočasnih zahtevah.
+ *
+ * Vrne "created" za nov naslov, "existing" za že prijavljen naslov in
+ * "unknown", če baza tega ne sporoči (starejša različica funkcije brez
+ * druge migracije). Obiskovalec v vseh primerih vidi enak odziv.
  */
 export async function addToWaitlist(
   input: ValidWaitlistInput,
   consentTextVersion: string,
-): Promise<"ok" | "error"> {
+): Promise<"created" | "existing" | "unknown" | "error"> {
   const supabase = getServiceClient();
   if (!supabase) {
     console.error("[waitlist] Supabase ni nastavljen");
     return "error";
   }
   try {
-    const { error } = await supabase.rpc("waitlist_subscribe", {
+    const { data, error } = await supabase.rpc("waitlist_subscribe", {
       p_email: input.email,
       p_newsletter: input.newsletter,
       p_consent_text_version: consentTextVersion,
@@ -62,7 +66,9 @@ export async function addToWaitlist(
       logDbError("shranjevanje", error.code);
       return "error";
     }
-    return "ok";
+    if (data === true) return "created";
+    if (data === false) return "existing";
+    return "unknown";
   } catch {
     logDbError("shranjevanje", "network");
     return "error";
