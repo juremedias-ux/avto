@@ -1,10 +1,8 @@
 "use server";
 
 import { headers } from "next/headers";
-import { after } from "next/server";
 import { messages } from "@/content";
 import { CONSENT_TEXT_VERSION } from "@/lib/consent";
-import { sendSignupNotification } from "@/lib/notify";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { getClientIp, isSameOrigin } from "@/lib/request";
 import { addToWaitlist } from "@/lib/waitlist";
@@ -64,15 +62,7 @@ export async function subscribeToWaitlist(
     if (limit === "error") return failure(messages.saveFailed);
 
     const result = await addToWaitlist(validation.data, CONSENT_TEXT_VERSION);
-    if (result === "error") return failure(messages.saveFailed);
-
-    // Obvestilo lastniku samo za nov naslov, po odzivu obiskovalcu.
-    if (result === "created" || result === "unknown") {
-      const notice = { ...validation.data, createdAt: new Date() };
-      after(async () => {
-        await sendSignupNotification(notice);
-      });
-    }
+    if (result !== "ok") return failure(messages.saveFailed);
 
     return { status: "success", message: messages.success, attempt };
   } catch {

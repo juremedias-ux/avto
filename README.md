@@ -18,7 +18,6 @@ Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombi
 - [6. Nastavitev lastniškega ID-ja](#6-nastavitev-lastniškega-id-ja)
 - [7. Dostop do administracije](#7-dostop-do-administracije)
 - [8. Upravljanje in izvoz prijav](#8-upravljanje-in-izvoz-prijav)
-- [8a. Obvestilo ob novi prijavi](#8a-obvestilo-ob-novi-prijavi)
 - [9. Dodajanje in zamenjava priloženih datotek](#9-dodajanje-in-zamenjava-priloženih-datotek)
 - [10. Urejanje besedil, barv in slik](#10-urejanje-besedil-barv-in-slik)
 - [11. Podatki upravljavca in kontakt](#11-podatki-upravljavca-in-kontakt)
@@ -134,16 +133,13 @@ Uporablja se projekt Supabase **`rplgjmogsajzzfkohxwy`**:
 
 ## 3. Izvedba migracij
 
-Migraciji (izvedi ju po vrsti):
-
-1. `20261102120000_waitlist.sql` ustvari tabelo `public.waitlist`, zasebno shemo `private` s kratkotrajnimi števci za omejevanje zahtev in funkciji `waitlist_subscribe` ter `check_rate_limit`. Vklopi RLS in **odvzame vse pravice javnima vlogama `anon` in `authenticated`**.
-2. `20261104120000_waitlist_subscribe_returns_inserted.sql` spremeni `waitlist_subscribe`, da vrne, ali je bil naslov nov. Potrebno za obvestilo lastniku samo ob novih prijavah (glej [8a](#8a-obvestilo-ob-novi-prijavi)).
+Migracija ustvari tabelo `public.waitlist`, zasebno shemo `private` s kratkotrajnimi števci za omejevanje zahtev in funkciji `waitlist_subscribe` ter `check_rate_limit`. Vklopi RLS in **odvzame vse pravice javnima vlogama `anon` in `authenticated`**.
 
 **Najpreprosteje (brez dodatnih orodij):**
 
 1. Odpri SQL Editor projekta: <https://supabase.com/dashboard/project/rplgjmogsajzzfkohxwy/sql/new>.
-2. Kopiraj celotno vsebino datoteke `supabase/migrations/20261102120000_waitlist.sql`, prilepi jo v prazno polje in klikni »Run«. Rezultat mora biti brez napak.
-3. Polje izprazni, ponovi z datoteko `supabase/migrations/20261104120000_waitlist_subscribe_returns_inserted.sql` in klikni »Run«.
+2. Kopiraj celotno vsebino datoteke `supabase/migrations/20261102120000_waitlist.sql`.
+3. Klikni »Run«. Rezultat mora biti brez napak.
 
 **Z orodjem Supabase CLI** (za razvijalce):
 
@@ -159,7 +155,7 @@ npx supabase link --project-ref rplgjmogsajzzfkohxwy
 npx supabase db push
 ```
 
-Migraciji je varno pognati večkrat (ne podvojita tabel in ne brišeta podatkov).
+Migracijo je varno pognati večkrat (ne podvoji tabel in ne briše podatkov).
 
 ---
 
@@ -175,10 +171,6 @@ Migraciji je varno pognati večkrat (ne podvojita tabel in ne brišeta podatkov)
 | `RATE_LIMIT_SECRET` | ne – skrivnost | Neobvezno. Ključ za psevdonimizacijo IP-naslovov. Če je prazen, se izpelje iz `SUPABASE_SECRET_KEY`. |
 | `CLIENT_IP_HEADER` | ne | Neobvezno. Na Vercelu pusti prazno. Na Netlifyju: `x-nf-client-connection-ip`. |
 | `ALLOW_INDEXING` | ne | `true` dovoli indeksiranje v iskalnikih. Privzeto izklopljeno; vklopi šele ob javni objavi. |
-| `NOTIFY_EMAIL_TO` | ne | Naslov za obvestila o novih prijavah: `gradimo.camper@gmail.com`. |
-| `SMTP_USER` | ne | Račun za pošiljanje (Gmail naslov). |
-| `SMTP_PASSWORD` | ne – **skrivnost** | Geslo za aplikacije Gmail (16 znakov), ne običajno geslo. |
-| `SMTP_HOST`, `SMTP_PORT`, `NOTIFY_EMAIL_FROM` | ne | Neobvezno. Privzeto `smtp.gmail.com`, `465` in `SMTP_USER`. |
 
 Pravila:
 
@@ -240,29 +232,6 @@ V administraciji:
 
 ---
 
-## 8a. Obvestilo ob novi prijavi
-
-Ob vsaki **novi** prijavi stran pošlje sporočilo na `gradimo.camper@gmail.com` z zadevo »Nova prijava – GradimoCamper«. Vsebuje e-poštni naslov, privolitev za novice (da/ne), obrazec, čas in povezavo do administracije.
-
-- Ponovna oddaja istega naslova, past za robote, omejene ali neuspešne oddaje sporočila ne sprožijo.
-- Sporočilo se pošlje po odzivu obiskovalcu. Če pošiljanje ne uspe, je prijava kljub temu shranjena; v dnevniku Vercela (Logs) je vrstica `[obvestilo] pošiljanje ni uspelo` s kodo napake.
-- Brez nastavitev spodaj se prijave shranjujejo brez obvestila.
-
-**Nastavitev (Gmail):**
-
-1. V Google računu `gradimo.camper@gmail.com` vklopi **dvostopenjsko preverjanje** (Google račun → Varnost). Brez tega gesla za aplikacije ni mogoče ustvariti.
-2. Odpri <https://myaccount.google.com/apppasswords>, vpiši ime (npr. `GradimoCamper Vercel`) in klikni **Ustvari**. Kopiraj 16-mestno geslo.
-3. V Supabase izvedi drugo migracijo (glej [3](#3-izvedba-migracij)).
-4. V Vercelu (Environment Variables, samo Production) dodaj:
-   - tip **Config**: `NOTIFY_EMAIL_TO` = `gradimo.camper@gmail.com`, `SMTP_USER` = `gradimo.camper@gmail.com`;
-   - tip **Secret**: `SMTP_PASSWORD` = geslo iz koraka 2 (brez presledkov).
-5. Naredi novo objavo (Deployments → »…« → Create Deployment → `main`).
-6. Preizkus: prijavi nov naslov na strani in preveri predal.
-
-Geslo za aplikacije omogoča dostop do pošte tega računa. Hrani ga samo v Vercelu; ob sumu razkritja ga na isti strani prekliči in ustvari novo.
-
----
-
 ## 9. Dodajanje in zamenjava priloženih datotek
 
 Izvirne priložene slike so nespremenjene v `assets/izvirne-priloge/`. Za splet so pripravljene kopije v `public/images/`:
@@ -320,8 +289,7 @@ export const privacyPage = { updated: "4. 11. 2026", legallyReviewed: false, …
 
 - zahteve za preklic ali izbris (prejete na `gradimo.camper@gmail.com`) izvedi najpozneje v enem mesecu;
 - prijave brez aktivne privolitve za novice izbriši najpozneje 30 dni po poslanem obvestilu ob zagonu;
-- prijave, ki po preklicu nimajo nobene aktivne privolitve, izbriši najpozneje v 30 dneh;
-- ob izbrisu prijave v Gmailu izbriši tudi obvestilo o tej prijavi (zadeva »Nova prijava – GradimoCamper«).
+- prijave, ki po preklicu nimajo nobene aktivne privolitve, izbriši najpozneje v 30 dneh.
 
 ---
 
