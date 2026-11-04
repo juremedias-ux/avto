@@ -23,11 +23,11 @@ export const brand = {
  * Prazna polja se ne prikažejo.
  */
 export const contact = {
-  email: "",
-  /** Telefonska številka za prikaz. */
-  phone: "041 883 487",
-  /** Ista številka v mednarodni obliki za povezavo tel:. */
-  phoneHref: "+38641883487",
+  email: "gradimo.camper@gmail.com",
+  /** Telefonska številka za prikaz (prazno = ni prikazana). */
+  phone: "",
+  /** Ista številka v mednarodni obliki za povezavo tel:, npr. "+38641000000". */
+  phoneHref: "",
 };
 
 /**
@@ -190,7 +190,7 @@ export const images = {
 export const privacyPage = {
   title: "Politika zasebnosti",
   /** Datum zadnje spremembe besedila politike. */
-  updated: "3. 11. 2026",
+  updated: "4. 11. 2026",
   /** Po pravnem pregledu nastavi na true; obvestilo spodaj se skrije. */
   legallyReviewed: false,
   reviewNotice: "Besedilo še ni pravno pregledano.",
