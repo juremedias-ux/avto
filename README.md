@@ -273,13 +273,13 @@ Spletne kopije iz izvirnikov ponoviš tako: `4-…png` obreži za zgornji 2 vrst
 Nastavljeno v `content.ts`:
 
 ```ts
-export const contact = { email: "", phone: "041 883 487", phoneHref: "+38641883487" };
+export const contact = { email: "gradimo.camper@gmail.com", phone: "", phoneHref: "" };
 export const controller = { name: "Gradimo Camper", address: "", registrationNumber: "", email: "" };
 export const dataLocation = { supabaseRegion: "EU – Irska (AWS eu-west-1)" };
-export const privacyPage = { updated: "3. 11. 2026", legallyReviewed: false, … };
+export const privacyPage = { updated: "4. 11. 2026", legallyReviewed: false, … };
 ```
 
-- Telefon se prikaže v nogi in v politiki zasebnosti (povezava `tel:`). E-pošta se prikaže, ko jo izpolniš.
+- E-pošta `gradimo.camper@gmail.com` se prikaže v nogi in v politiki zasebnosti (povezava `mailto:`). Telefon se prikaže, če ga izpolniš.
 - Naslov in matična številka upravljavca se prikažeta, ko ju izpolniš.
 - Regija baze Supabase (`dataLocation.supabaseRegion`) je vpisana; na `/zasebnost` ni več označenih mest `[DOPOLNI: …]`.
 - Ob spremembi besedila politike posodobi `privacyPage.updated`.
@@ -287,7 +287,7 @@ export const privacyPage = { updated: "3. 11. 2026", legallyReviewed: false, …
 
 **Obveznosti iz politike zasebnosti** (izvajaš jih ročno v administraciji):
 
-- zahteve za preklic ali izbris (prejete po telefonu ali SMS) izvedi najpozneje v enem mesecu;
+- zahteve za preklic ali izbris (prejete na `gradimo.camper@gmail.com`) izvedi najpozneje v enem mesecu;
 - prijave brez aktivne privolitve za novice izbriši najpozneje 30 dni po poslanem obvestilu ob zagonu;
 - prijave, ki po preklicu nimajo nobene aktivne privolitve, izbriši najpozneje v 30 dneh.
 
@@ -378,7 +378,7 @@ select cron.schedule('gradimocamper-ciscenje-stevcev', '*/15 * * * *',
 
 Javno objavo **preprečujejo**:
 
-- [x] Podatki upravljavca in kontakt (`Gradimo Camper`, 041 883 487).
+- [x] Podatki upravljavca in kontakt (`Gradimo Camper`, gradimo.camper@gmail.com).
 - [x] Gostovanje: Vercel, ekipa `gradimo-camper`; projekt Supabase `rplgjmogsajzzfkohxwy`.
 - [x] Regija baze Supabase: EU – Irska (`eu-west-1`).
 - [ ] **Pogodbi o obdelavi podatkov (DPA)** s Supabase in Vercel: preveri, da sta sprejeti (politika zasebnosti se nanju sklicuje).
