@@ -31,9 +31,12 @@ export type WaitlistRow = {
 const COLUMNS =
   "id,email,created_at,launch_consent,launch_consent_at,launch_revoked_at,newsletter_consent,newsletter_consent_at,newsletter_revoked_at,consent_text_version,source";
 
-function logDbError(operation: string, code: string | undefined) {
-  // Brez e-poštnih naslovov in podrobnosti poizvedb v dnevnikih.
-  console.error(`[waitlist] ${operation} ni uspelo`, code ?? "unknown");
+function logDbError(operation: string, code: string | undefined, message?: string) {
+  // Brez e-poštnih naslovov in podrobnosti poizvedb v dnevnikih. Sporočilo
+  // dodamo samo za napake nastavitev (PostgREST, pravice, manjkajoča
+  // funkcija), ki ne vsebujejo podatkov iz vrstic.
+  const safe = message && code && (code.startsWith("PGRST") || code.startsWith("42"));
+  console.error(`[waitlist] ${operation} ni uspelo`, code ?? "unknown", safe ? message : "");
 }
 
 /**
@@ -59,7 +62,7 @@ export async function addToWaitlist(
       p_source: input.source,
     });
     if (error) {
-      logDbError("shranjevanje", error.code);
+      logDbError("shranjevanje", error.code, error.message);
       return "error";
     }
     return "ok";
