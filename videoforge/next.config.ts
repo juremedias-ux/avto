@@ -47,6 +47,8 @@ const privatePaths = ["/dashboard", "/create", "/library", "/billing", "/setting
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // This app lives in a subdirectory of a repository that has its own lockfile.
+  turbopack: { root: __dirname },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },
