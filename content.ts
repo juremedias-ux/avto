@@ -68,19 +68,22 @@ export const form = {
   submit: "Obvesti me ob zagonu",
   submitting: "Shranjujem …",
   note: "Brezplačno in brez uporabniškega računa.",
-  optionalTag: "neobvezno",
   honeypotLabel: "Tega polja ne izpolnjuj",
 };
 
 export const consent = {
   /** Povečaj ob vsebinski spremembi besedil spodaj. */
-  version: "v2",
+  version: "v3",
   /**
    * Privolitev za obvestilo ob zagonu se da s klikom na gumb (brez
    * potrditvenega polja). Besedilo je prikazano tik ob gumbu.
    */
   launch:
     "S klikom na »Obvesti me ob zagonu« se strinjaš, da ti na vpisani naslov pošljemo obvestilo ob zagonu platforme GradimoCamper.",
+  /**
+   * Besedilo nekdanjega neobveznega polja za novice (obrazec ga ne prikazuje
+   * več od 5. 11. 2026). Ostaja za politiko zasebnosti zaradi že danih privolitev.
+   */
   newsletter:
     "Želim prejemati tudi praktične nasvete, novice in občasne ponudbe GradimoCamper.",
   infoBeforeLink: "Privolitev lahko kadar koli prekličeš. Več o obdelavi podatkov v ",
@@ -145,7 +148,7 @@ export const faq = {
     },
     {
       q: "Ali s prijavo ustvarim račun?",
-      a: "Ne. Oddaš samo e-poštni naslov za izbrana obvestila. Uporabniškega računa ne potrebuješ.",
+      a: "Ne. Oddaš samo e-poštni naslov za obvestilo ob zagonu. Uporabniškega računa ne potrebuješ.",
     },
   ],
 };

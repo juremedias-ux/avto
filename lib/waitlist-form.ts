@@ -11,16 +11,12 @@ export type WaitlistSource = (typeof WAITLIST_SOURCES)[number];
 
 export const FIELD = {
   email: "email",
-  newsletter: "novice",
   source: "vir",
   honeypot: "spletna_stran",
 } as const;
 
-export const CHECKED_VALUE = "da";
-
 export type WaitlistValues = {
   email: string;
-  newsletter: boolean;
 };
 
 export type WaitlistFieldErrors = {
@@ -64,21 +60,16 @@ export function readWaitlistValues(formData: FormData): WaitlistValues {
   const email = formData.get(FIELD.email);
   return {
     email: typeof email === "string" ? email.slice(0, 320) : "",
-    newsletter: formData.get(FIELD.newsletter) === CHECKED_VALUE,
   };
 }
 
 /**
  * Strežniško in odjemalsko preverjanje vnosa.
  * Privolitev za obvestilo ob zagonu je dana z oddajo obrazca (klik na
- * gumb »Obvesti me ob zagonu«), zato potrditveno polje ni potrebno.
- * Privolitev za novice je neobvezna in ločena.
+ * gumb »Obvesti me ob zagonu«). Obrazec privolitve za novice ne ponuja,
+ * zato se ta vedno shrani kot »ne«, ne glede na poslane podatke.
  */
-export function validateWaitlist(input: {
-  email: unknown;
-  newsletter: unknown;
-  source: unknown;
-}): WaitlistValidation {
+export function validateWaitlist(input: { email: unknown; source: unknown }): WaitlistValidation {
   const parsed = parseEmail(input.email);
   if (!parsed.ok) return { ok: false, fieldErrors: { email: messages.invalidEmail } };
 
@@ -86,7 +77,7 @@ export function validateWaitlist(input: {
     ok: true,
     data: {
       email: parsed.email,
-      newsletter: input.newsletter === true,
+      newsletter: false,
       source: isSource(input.source) ? input.source : "prvi_zaslon",
     },
   };

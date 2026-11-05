@@ -5,7 +5,6 @@ import { useActionState, useEffect, useRef, useState, type FormEvent } from "rea
 import { subscribeToWaitlist } from "@/app/actions/waitlist";
 import { consent, form as copy } from "@/content";
 import {
-  CHECKED_VALUE,
   FIELD,
   initialWaitlistState,
   validateWaitlist,
@@ -40,7 +39,6 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
   const ids = {
     email: `${id}-email`,
     emailError: `${id}-email-napaka`,
-    newsletter: `${id}-novice`,
     note: `${id}-opomba`,
     result: `${id}-rezultat`,
     honeypot: `${id}-spletna-stran`,
@@ -69,7 +67,6 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
     const data = new FormData(event.currentTarget);
     const result = validateWaitlist({
       email: data.get(FIELD.email),
-      newsletter: data.get(FIELD.newsletter) === CHECKED_VALUE,
       source,
     });
     if (!result.ok) {
@@ -165,20 +162,6 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
           </p>
         ) : null}
 
-        <label htmlFor={ids.newsletter} className="check-row mt-4">
-          <input
-            id={ids.newsletter}
-            name={FIELD.newsletter}
-            type="checkbox"
-            value={CHECKED_VALUE}
-            defaultChecked={values?.newsletter ?? false}
-            className="check-input"
-          />
-          <span>
-            {consent.newsletter}{" "}
-            <span className="check-tag">({copy.optionalTag})</span>
-          </span>
-        </label>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
