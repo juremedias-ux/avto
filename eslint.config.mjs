@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Starejši statični prototip (ni del GradimoCamper):
     "script.js",
+    // Samostojna aplikacija VideoForge AI z lastno konfiguracijo:
+    "videoforge/**",
   ]),
   {
     rules: {
