@@ -37,7 +37,7 @@ Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombi
 | --- | --- |
 | Javna stran `/` | Prvi zaslon s prijavo, »Kaj pripravljamo«, vizualna zgodba, pogosta vprašanja, zaključna prijava, noga. |
 | Prijavni obrazec | En gradnik (`components/WaitlistForm.tsx`) z eno strežniško akcijo (`app/actions/waitlist.ts`), prikazan dvakrat z različnimi HTML-identifikatorji. Deluje tudi brez JavaScripta. |
-| Privolitvi | Za prijavo zadostuje e-poštni naslov: privolitev za obvestilo ob zagonu je dana s klikom na »Obvesti me ob zagonu« (besedilo je ob gumbu). Privolitev za nasvete, novice in ponudbe je ločeno, neobvezno in privzeto neoznačeno polje. Obe se shranita ločeno s časom in različico besedila. |
+| Privolitev | Za prijavo zadostuje e-poštni naslov: privolitev za obvestilo ob zagonu je dana s klikom na »Obvesti me ob zagonu« (besedilo je ob gumbu) in se shrani s časom in različico besedila. Polja za novice obrazec od 5. 11. 2026 ne prikazuje; nove prijave imajo novice »ne«. Že dane privolitve za novice ostanejo v bazi, izvoz »Novice« v administraciji jih še vedno vključuje. |
 | Politika zasebnosti `/zasebnost` | Dopolnjeno besedilo brez odprtih mest. Pravno ni pregledano. |
 | Administracija `/admin` | Prijava lastnika (Supabase Auth), povzetek, tabela, iskanje, straničenje, razvrščanje, CSV-izvoz, preklic privolitve, trajni izbris. |
 | Baza | `supabase/migrations/20261102120000_waitlist.sql` |

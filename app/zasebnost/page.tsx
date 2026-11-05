@@ -143,9 +143,10 @@ export default function PrivacyPage() {
                   odstavka 6. člena Splošne uredbe o varstvu podatkov), ki jo daš z oddajo obrazca: »{consent.launch}«
                 </li>
                 <li>
-                  <strong>Praktični nasveti, novice in občasne ponudbe</strong> – samo, če je bila zanje dana
-                  ločena, neobvezna privolitev (točka (a) prvega odstavka 6. člena Splošne uredbe o varstvu
-                  podatkov): »{consent.newsletter}«
+                  <strong>Praktični nasveti, novice in občasne ponudbe</strong> – samo za prijave, pri katerih je
+                  bila zanje dana ločena, neobvezna privolitev (točka (a) prvega odstavka 6. člena Splošne uredbe
+                  o varstvu podatkov): »{consent.newsletter}«. Obrazec je to možnost ponujal do 5. 11. 2026; nove
+                  prijave te privolitve ne vsebujejo.
                 </li>
                 <li>
                   <strong>Zaščita obrazca pred zlorabami</strong> – na podlagi zakonitega interesa upravljavca
@@ -226,7 +227,8 @@ export default function PrivacyPage() {
 
             <Section title="8. Preklic privolitve in izbris">
               <p>
-                Privolitvi za obvestilo ob zagonu in za novice lahko prekličeš ločeno. Za preklic ali izbris{" "}
+                Privolitev za obvestilo ob zagonu (in morebitno privolitev za novice) lahko prekličeš ločeno. Za
+                preklic ali izbris{" "}
                 {contactMethod} <ContactDetails /> in navedi e-poštni naslov iz prijave ter katero privolitev
                 prekličeš oziroma da želiš izbris vseh podatkov. Zahtevo izvedemo ročno v
                 administraciji brez nepotrebnega odlašanja, najpozneje v enem mesecu od prejema.

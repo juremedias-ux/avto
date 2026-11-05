@@ -48,7 +48,6 @@ export async function subscribeToWaitlist(
 
     const validation = validateWaitlist({
       email: values.email,
-      newsletter: values.newsletter,
       source: formData.get(FIELD.source),
     });
     if (!validation.ok) {

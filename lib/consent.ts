@@ -15,6 +15,5 @@ export function consentFingerprint(texts: readonly string[]): string {
 
 export const CONSENT_TEXT_VERSION = `${consent.version}+${consentFingerprint([
   consent.launch,
-  consent.newsletter,
   `${consent.infoBeforeLink}${consent.infoLink}${consent.infoAfterLink}`,
 ])}`;
