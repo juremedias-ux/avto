@@ -8,47 +8,43 @@ import {
 } from "@/lib/waitlist-form";
 
 describe("validateWaitlist", () => {
-  it("sprejme veljavno prijavo brez novic", () => {
+  it("sprejme prijavo samo z e-poštnim naslovom (brez potrditvenih polj)", () => {
     expect(
-      validateWaitlist({ email: " Ana@Primer.si ", launch: true, newsletter: false, source: "zakljucek" }),
+      validateWaitlist({ email: " Ana@Primer.si ", newsletter: false, source: "zakljucek" }),
     ).toEqual({ ok: true, data: { email: "ana@primer.si", newsletter: false, source: "zakljucek" } });
   });
 
-  it("sprejme obe privolitvi", () => {
-    const result = validateWaitlist({ email: "ana@primer.si", launch: true, newsletter: true, source: "prvi_zaslon" });
+  it("sprejme tudi neobvezno privolitev za novice", () => {
+    const result = validateWaitlist({ email: "ana@primer.si", newsletter: true, source: "prvi_zaslon" });
     expect(result.ok && result.data.newsletter).toBe(true);
   });
 
-  it("zahteva obvezno privolitev za zagon", () => {
-    expect(
-      validateWaitlist({ email: "ana@primer.si", launch: false, newsletter: true, source: "prvi_zaslon" }),
-    ).toEqual({ ok: false, fieldErrors: { launch: messages.missingLaunchConsent } });
-  });
-
-  it("vrne obe napaki hkrati", () => {
-    expect(validateWaitlist({ email: "x", launch: false, newsletter: false, source: "prvi_zaslon" })).toEqual({
+  it("zavrne neveljaven naslov", () => {
+    expect(validateWaitlist({ email: "x", newsletter: false, source: "prvi_zaslon" })).toEqual({
       ok: false,
-      fieldErrors: { email: messages.invalidEmail, launch: messages.missingLaunchConsent },
+      fieldErrors: { email: messages.invalidEmail },
     });
   });
 
   it("neveljaven vir nadomesti z privzetim", () => {
-    const result = validateWaitlist({ email: "ana@primer.si", launch: true, newsletter: false, source: "drugo" });
+    const result = validateWaitlist({ email: "ana@primer.si", newsletter: false, source: "drugo" });
     expect(result.ok && result.data.source).toBe("prvi_zaslon");
   });
 
-  it("privolitev za novice ni pogoj za prijavo", () => {
-    expect(validateWaitlist({ email: "ana@primer.si", launch: true, newsletter: false, source: "prvi_zaslon" }).ok).toBe(true);
+  it("novice niso označene, če vrednost ni točno true", () => {
+    const result = validateWaitlist({ email: "ana@primer.si", newsletter: "true", source: "prvi_zaslon" });
+    expect(result.ok && result.data.newsletter).toBe(false);
   });
 });
 
 describe("readWaitlistValues", () => {
-  it("prebere samo pričakovane vrednosti potrditvenih polj", () => {
+  it("prebere samo pričakovano vrednost potrditvenega polja", () => {
     const data = new FormData();
     data.set(FIELD.email, "ana@primer.si");
-    data.set(FIELD.launch, CHECKED_VALUE);
     data.set(FIELD.newsletter, "true");
-    expect(readWaitlistValues(data)).toEqual({ email: "ana@primer.si", launch: true, newsletter: false });
+    expect(readWaitlistValues(data)).toEqual({ email: "ana@primer.si", newsletter: false });
+    data.set(FIELD.newsletter, CHECKED_VALUE);
+    expect(readWaitlistValues(data).newsletter).toBe(true);
   });
 
   it("omeji dolžino vrnjenega vnosa", () => {

@@ -140,7 +140,7 @@ export default function PrivacyPage() {
               <ul>
                 <li>
                   <strong>Obvestilo ob zagonu platforme</strong> – na podlagi tvoje privolitve (točka (a) prvega
-                  odstavka 6. člena Splošne uredbe o varstvu podatkov): »{consent.launch}«
+                  odstavka 6. člena Splošne uredbe o varstvu podatkov), ki jo daš z oddajo obrazca: »{consent.launch}«
                 </li>
                 <li>
                   <strong>Praktični nasveti, novice in občasne ponudbe</strong> – samo, če je bila zanje dana

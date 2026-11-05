@@ -35,14 +35,11 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
     local && local.attempt === state.attempt ? local.errors : (state.fieldErrors ?? {});
 
   const emailRef = useRef<HTMLInputElement>(null);
-  const launchRef = useRef<HTMLInputElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
 
   const ids = {
     email: `${id}-email`,
     emailError: `${id}-email-napaka`,
-    launch: `${id}-zagon`,
-    launchError: `${id}-zagon-napaka`,
     newsletter: `${id}-novice`,
     note: `${id}-opomba`,
     result: `${id}-rezultat`,
@@ -51,7 +48,6 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
 
   function focusFirstInvalid(fieldErrors: WaitlistFieldErrors) {
     if (fieldErrors.email) emailRef.current?.focus();
-    else if (fieldErrors.launch) launchRef.current?.focus();
   }
 
   // Po odzivu strežnika premakni fokus na prvo napako ali na rezultat.
@@ -59,7 +55,7 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
     if (state.attempt === 0) return;
     if (state.status === "success") {
       successRef.current?.focus();
-    } else if (state.fieldErrors?.email || state.fieldErrors?.launch) {
+    } else if (state.fieldErrors?.email) {
       focusFirstInvalid(state.fieldErrors);
     }
     // Splošne napake objavi območje role="alert"; fokus ostane na gumbu.
@@ -73,7 +69,6 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
     const data = new FormData(event.currentTarget);
     const result = validateWaitlist({
       email: data.get(FIELD.email),
-      launch: data.get(FIELD.launch) === CHECKED_VALUE,
       newsletter: data.get(FIELD.newsletter) === CHECKED_VALUE,
       source,
     });
@@ -170,51 +165,20 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
           </p>
         ) : null}
 
-        <fieldset className="mt-5 space-y-1.5">
-          <legend className="sr-only">Privolitve</legend>
-
-          <div>
-            <label htmlFor={ids.launch} className="check-row">
-              <input
-                ref={launchRef}
-                id={ids.launch}
-                name={FIELD.launch}
-                type="checkbox"
-                value={CHECKED_VALUE}
-                defaultChecked={values?.launch ?? false}
-                aria-invalid={errors.launch ? true : undefined}
-                aria-describedby={errors.launch ? ids.launchError : undefined}
-                onChange={() => clearError("launch")}
-                className="check-input"
-              />
-              <span>
-                {consent.launch}{" "}
-                <span className="check-tag">({copy.requiredTag})</span>
-              </span>
-            </label>
-            {errors.launch ? (
-              <p id={ids.launchError} className="field-error ml-9">
-                <ErrorIcon />
-                {errors.launch}
-              </p>
-            ) : null}
-          </div>
-
-          <label htmlFor={ids.newsletter} className="check-row">
-            <input
-              id={ids.newsletter}
-              name={FIELD.newsletter}
-              type="checkbox"
-              value={CHECKED_VALUE}
-              defaultChecked={values?.newsletter ?? false}
-              className="check-input"
-            />
-            <span>
-              {consent.newsletter}{" "}
-              <span className="check-tag">({copy.optionalTag})</span>
-            </span>
-          </label>
-        </fieldset>
+        <label htmlFor={ids.newsletter} className="check-row mt-4">
+          <input
+            id={ids.newsletter}
+            name={FIELD.newsletter}
+            type="checkbox"
+            value={CHECKED_VALUE}
+            defaultChecked={values?.newsletter ?? false}
+            className="check-input"
+          />
+          <span>
+            {consent.newsletter}{" "}
+            <span className="check-tag">({copy.optionalTag})</span>
+          </span>
+        </label>
       </div>
 
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
@@ -238,7 +202,7 @@ export function WaitlistForm({ id, source }: WaitlistFormProps) {
       </div>
 
       <p id={ids.note} className="mt-4 text-sm leading-relaxed text-ink-muted">
-        {consent.infoBeforeLink}
+        {consent.launch} {consent.infoBeforeLink}
         <Link href="/zasebnost" className="text-link">
           {consent.infoLink}
         </Link>
