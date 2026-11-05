@@ -1,0 +1,16 @@
+# The repository root .gitignore ignores "lib/" (Python template); re-include it here.
+!lib/
+!lib/**
+
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+.env
+.env*.local
+.DS_Store
+npm-debug.log*
