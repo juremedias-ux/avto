@@ -11,7 +11,6 @@ export type WaitlistSource = (typeof WAITLIST_SOURCES)[number];
 
 export const FIELD = {
   email: "email",
-  launch: "zagon",
   newsletter: "novice",
   source: "vir",
   honeypot: "spletna_stran",
@@ -21,13 +20,11 @@ export const CHECKED_VALUE = "da";
 
 export type WaitlistValues = {
   email: string;
-  launch: boolean;
   newsletter: boolean;
 };
 
 export type WaitlistFieldErrors = {
   email?: string;
-  launch?: string;
 };
 
 export type WaitlistFormState = {
@@ -67,26 +64,23 @@ export function readWaitlistValues(formData: FormData): WaitlistValues {
   const email = formData.get(FIELD.email);
   return {
     email: typeof email === "string" ? email.slice(0, 320) : "",
-    launch: formData.get(FIELD.launch) === CHECKED_VALUE,
     newsletter: formData.get(FIELD.newsletter) === CHECKED_VALUE,
   };
 }
 
-/** Strežniško in odjemalsko preverjanje vnosa. */
+/**
+ * Strežniško in odjemalsko preverjanje vnosa.
+ * Privolitev za obvestilo ob zagonu je dana z oddajo obrazca (klik na
+ * gumb »Obvesti me ob zagonu«), zato potrditveno polje ni potrebno.
+ * Privolitev za novice je neobvezna in ločena.
+ */
 export function validateWaitlist(input: {
   email: unknown;
-  launch: unknown;
   newsletter: unknown;
   source: unknown;
 }): WaitlistValidation {
-  const fieldErrors: WaitlistFieldErrors = {};
-
   const parsed = parseEmail(input.email);
-  if (!parsed.ok) fieldErrors.email = messages.invalidEmail;
-
-  if (input.launch !== true) fieldErrors.launch = messages.missingLaunchConsent;
-
-  if (!parsed.ok || fieldErrors.launch) return { ok: false, fieldErrors };
+  if (!parsed.ok) return { ok: false, fieldErrors: { email: messages.invalidEmail } };
 
   return {
     ok: true,

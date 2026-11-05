@@ -37,7 +37,7 @@ Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombi
 | --- | --- |
 | Javna stran `/` | Prvi zaslon s prijavo, »Kaj pripravljamo«, vizualna zgodba, pogosta vprašanja, zaključna prijava, noga. |
 | Prijavni obrazec | En gradnik (`components/WaitlistForm.tsx`) z eno strežniško akcijo (`app/actions/waitlist.ts`), prikazan dvakrat z različnimi HTML-identifikatorji. Deluje tudi brez JavaScripta. |
-| Privolitvi | Obvezna (obvestilo ob zagonu) in neobvezna (nasveti, novice, ponudbe), obe privzeto neoznačeni, shranjeni ločeno s časom in različico besedila. |
+| Privolitvi | Za prijavo zadostuje e-poštni naslov: privolitev za obvestilo ob zagonu je dana s klikom na »Obvesti me ob zagonu« (besedilo je ob gumbu). Privolitev za nasvete, novice in ponudbe je ločeno, neobvezno in privzeto neoznačeno polje. Obe se shranita ločeno s časom in različico besedila. |
 | Politika zasebnosti `/zasebnost` | Dopolnjeno besedilo brez odprtih mest. Pravno ni pregledano. |
 | Administracija `/admin` | Prijava lastnika (Supabase Auth), povzetek, tabela, iskanje, straničenje, razvrščanje, CSV-izvoz, preklic privolitve, trajni izbris. |
 | Baza | `supabase/migrations/20261102120000_waitlist.sql` |
@@ -276,7 +276,7 @@ Nastavljeno v `content.ts`:
 export const contact = { email: "gradimo.camper@gmail.com", phone: "", phoneHref: "" };
 export const controller = { name: "Gradimo Camper", address: "", registrationNumber: "", email: "" };
 export const dataLocation = { supabaseRegion: "EU – Irska (AWS eu-west-1)" };
-export const privacyPage = { updated: "4. 11. 2026", legallyReviewed: false, … };
+export const privacyPage = { updated: "5. 11. 2026", legallyReviewed: false, … };
 ```
 
 - E-pošta `gradimo.camper@gmail.com` se prikaže v nogi in v politiki zasebnosti (povezava `mailto:`). Telefon se prikaže, če ga izpolniš.
@@ -402,7 +402,7 @@ Pozneje (ni v tej različici): potrditveno sporočilo (double opt-in), storitev 
 
 ## Varnost na kratko
 
-- Oddaja prek strežniške akcije; strežnik preveri obliko in dolžino, normalizira naslov, preveri obvezno privolitev, past za robote (skrito polje), omejitev zahtev in izvor zahteve.
+- Oddaja prek strežniške akcije; strežnik preveri obliko in dolžino, normalizira naslov, preveri past za robote (skrito polje), omejitev zahtev in izvor zahteve.
 - Omejevanje zahtev je v bazi (deluje pri več strežniških instancah): 5 oddaj v 10 minutah z istega IP-naslova.
 - Dvojnike prepreči enolična omejitev v bazi (`INSERT … ON CONFLICT DO NOTHING`), tudi pri sočasnih zahtevah.
 - RLS je vklopljen; vloge `anon` in `authenticated` nimajo pravic do tabel in funkcij.

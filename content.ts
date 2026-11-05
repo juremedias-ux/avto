@@ -68,15 +68,19 @@ export const form = {
   submit: "Obvesti me ob zagonu",
   submitting: "Shranjujem …",
   note: "Brezplačno in brez uporabniškega računa.",
-  requiredTag: "obvezno",
   optionalTag: "neobvezno",
   honeypotLabel: "Tega polja ne izpolnjuj",
 };
 
 export const consent = {
   /** Povečaj ob vsebinski spremembi besedil spodaj. */
-  version: "v1",
-  launch: "Želim prejeti obvestilo ob zagonu platforme GradimoCamper.",
+  version: "v2",
+  /**
+   * Privolitev za obvestilo ob zagonu se da s klikom na gumb (brez
+   * potrditvenega polja). Besedilo je prikazano tik ob gumbu.
+   */
+  launch:
+    "S klikom na »Obvesti me ob zagonu« se strinjaš, da ti na vpisani naslov pošljemo obvestilo ob zagonu platforme GradimoCamper.",
   newsletter:
     "Želim prejemati tudi praktične nasvete, novice in občasne ponudbe GradimoCamper.",
   infoBeforeLink: "Privolitev lahko kadar koli prekličeš. Več o obdelavi podatkov v ",
@@ -88,7 +92,6 @@ export const messages = {
   success:
     "Hvala! Če ta naslov še ni prijavljen, smo prijavo shranili. Ob zagonu te bomo obvestili.",
   invalidEmail: "Vpiši veljaven e-poštni naslov.",
-  missingLaunchConsent: "Za obvestilo ob zagonu označi ustrezno polje.",
   rateLimited: "Počakaj trenutek in poskusi znova.",
   saveFailed: "Prijave trenutno ni bilo mogoče shraniti. Poskusi znova.",
 };
@@ -190,7 +193,7 @@ export const images = {
 export const privacyPage = {
   title: "Politika zasebnosti",
   /** Datum zadnje spremembe besedila politike. */
-  updated: "4. 11. 2026",
+  updated: "5. 11. 2026",
   /** Po pravnem pregledu nastavi na true; obvestilo spodaj se skrije. */
   legallyReviewed: false,
   reviewNotice: "Besedilo še ni pravno pregledano.",
