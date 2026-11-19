@@ -1,6 +1,8 @@
 # GradimoCamper
 
-Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombijev v camperje. Obiskovalec se prijavi na obvestilo ob zagonu; prijave se shranijo v bazo Supabase; lastnik jih pregleduje v zasebni administraciji na `/admin`.
+Slovenska platforma v nastajanju za domačo predelavo kombijev v camperje. Obiskovalec se prijavi na obvestilo ob zagonu; prijave se shranijo v bazo Supabase; lastnik jih pregleduje v zasebni administraciji na `/admin`.
+
+Projekt vsebuje tudi platformo (središče znanja, katalog izdelkov s povpraševanjem, urejevalnik vsebin na `/cms`), ki je do potrditve lastnika vidna samo prijavljenim urednikom. Glej [17. Platforma](#17-platforma-učenje-izdelki-in-urejevalnik-vsebin).
 
 **Stanje:** prva različica, pripravljena za nastavitev in preverjanje. Gostovanje: Vercel (ekipa `gradimo-camper`), baza: Supabase (projekt `rplgjmogsajzzfkohxwy`). Stran **še ni objavljena**. Pred javno objavo glej [16. Odprte naloge pred javno objavo](#16-odprte-naloge-pred-javno-objavo).
 
@@ -26,6 +28,7 @@ Pristajalna stran za slovensko platformo v nastajanju za domačo predelavo kombi
 - [14. Omejitve: lastništvo e-pošte ni preverjeno](#14-omejitve-lastništvo-e-pošte-ni-preverjeno)
 - [15. Varnostne kopije in skrivnosti](#15-varnostne-kopije-in-skrivnosti)
 - [16. Odprte naloge pred javno objavo](#16-odprte-naloge-pred-javno-objavo)
+- [17. Platforma: učenje, izdelki in urejevalnik vsebin](#17-platforma-učenje-izdelki-in-urejevalnik-vsebin)
 - [Varnost na kratko](#varnost-na-kratko)
 - [Preverjanje kakovosti](#preverjanje-kakovosti)
 
@@ -47,17 +50,25 @@ Tehnologija: Next.js 16 (App Router), TypeScript, Tailwind CSS 4, Supabase (Post
 ### Struktura
 
 ```
-app/                      strani in strežniške poti
-  page.tsx                javna stran
-  actions/waitlist.ts     strežniška akcija za prijavo
-  zasebnost/page.tsx      osnutek politike zasebnosti
-  admin/                  administracija (stran, prijava, akcije, CSV-izvoz)
+app/
+  (frontend)/             javni del (lastna korenska postavitev)
+    page.tsx              stran za prijavo ali domača stran platforme
+    actions/              strežniški akciji za prijavo in povpraševanje
+    zasebnost/            politika zasebnosti
+    admin/                administracija prijav (stran, prijava, akcije, CSV-izvoz)
+    ucenje/, vodici/, izdelki/, iskanje/, povprasevanje/, kontakt/, o-nas/, pogoji/
+    globals.css           oblikovni žetoni (barve, pisava, razmiki) in skupni slogi
+  (payload)/              urejevalnik /cms in REST API /api (Payload CMS)
+  global-not-found.tsx    stran 404
   robots.ts, sitemap.ts   robots.txt in sitemap
   icon.svg, apple-icon.png, favicon.ico, opengraph-image.png
-components/               gradniki (logotip, obrazec, odseki, administracija)
-lib/                      validacija, podatkovni sloj, avtentikacija, omejevanje zahtev, CSV
+cms/                      zbirke, pravila dostopa, migracije in vzorčne vsebine urejevalnika
+payload.config.ts         nastavitve urejevalnika
+payload-types.ts          samodejno ustvarjeni tipi (npm run cms:types)
+components/               gradniki (landing/, platform/, admin/, obrazec)
+lib/                      validacija, podatkovni sloj, avtentikacija, omejevanje zahtev, CSV, platforma
 content.ts                ime znamke, besedila, kontakt, podatki upravljavca, slike
-app/globals.css           oblikovni žetoni (barve, pisava, razmiki) in skupni slogi
+public/vzorci/            vzorčni video, podnapisi in naslovnica
 public/images/            slike za splet
 assets/izvirne-priloge/   nespremenjene izvirne priložene slike
 supabase/migrations/      migracije baze
@@ -398,6 +409,102 @@ Odprto tveganje (po odločitvi lastnika ne ustavlja objave):
 
 Pozneje (ni v tej različici): potrditveno sporočilo (double opt-in), storitev za pošiljanje z odjavo, samodejni preklic prek povezave.
 
+## 17. Platforma: učenje, izdelki in urejevalnik vsebin
+
+Poleg strani za prijavo projekt vsebuje platformo z dvema deloma:
+
+| Del | Poti | Opis |
+| --- | --- | --- |
+| Domača stran platforme | `/` | Prvi zaslon, oba dela platforme, vodiči za začetek, načrt gradnje po fazah, področja izdelkov, »Kako delamo«, poziv h kontaktu. |
+| Središče znanja | `/ucenje`, `/ucenje/teme/…`, `/ucenje/clanki/…`, `/ucenje/videi/…` | Članki in video lekcije s filtri (faza, tema, zahtevnost, vrsta), ključni poudarki, varnostne opombe, kontrolni seznami za prenos, uporabljeni izdelki, sorodne vsebine. |
+| Vodiči gradnje | `/vodici`, `/vodici/nacrt-gradnje`, `/vodici/…` | Učne poti z označevanjem opravljenih korakov (shrani se v brskalniku) in načrt gradnje po fazah z vsebinami in opremo za vsako fazo. |
+| Izdelki | `/izdelki`, `/izdelki/<področje>`, `/izdelki/<področje>/<izdelek>` | Katalog s filtri (področje, faza, dobavljivost), tehnični podatki, združljivost, vodiči za vgradnjo, pogosta vprašanja. Ni košarice in plačila. |
+| Povpraševanje | `/povprasevanje`, `/kontakt` | Seznam izbranih izdelkov s količinami in obrazec »Prosim za ponudbo« ali »Želim rezervirati«; obrazec za vprašanje (tudi o posameznem izdelku). |
+| Ostalo | `/iskanje`, `/o-nas`, `/pogoji` | Iskanje po vodičih, videih, izdelkih in temah; stran O nas; osnutek pogojev uporabe. |
+| Urejevalnik | `/cms` | Payload CMS v slovenščini: vse vsebine, izdelki, datoteke, povpraševanja, uredniki. |
+
+Vse vsebine so v slovenščini. Urejevalnik (Payload CMS 3) teče v isti aplikaciji in uporablja isto bazo Supabase (ločena shema `cms`, tabele prijav na obvestilo ostanejo nespremenjene).
+
+### 17.1 Kdo vidi platformo
+
+- **Dokler `PLATFORM_PUBLIC` ni `true`**, obiskovalci vidijo obstoječo stran za prijavo na obvestilo; strani platforme zanje ne obstajajo (404). Prijavljeni uredniki vidijo platformo s pasico »Predogled za urednike«.
+- **Ko je `PLATFORM_PUBLIC=true`** (in je stran ponovno objavljena), je platforma javna. Obiskovalci vidijo samo **objavljene** vsebine; osnutke vidijo samo uredniki.
+- Platforme **ne objavljaj** brez potrditve lastnika.
+
+### 17.2 Nastavitev urejevalnika na Vercelu (enkrat)
+
+1. **Geslo baze.** Supabase → projekt `rplgjmogsajzzfkohxwy` → Project Settings → Database. Če gesla baze ne poznaš, ga ponastavi (»Reset database password«). Geslo baze ni isto kot ključi API; ponastavitev ne vpliva na obstoječo prijavo na obvestilo.
+2. **Povezava do baze.** Supabase → gumb **Connect** (zgoraj) → zavihek povezave → način **Session pooler** → kopiraj URI (`postgresql://postgres.rplgjmogsajzzfkohxwy:[YOUR-PASSWORD]@…pooler.supabase.com:5432/postgres`). `[YOUR-PASSWORD]` zamenjaj z geslom iz koraka 1.
+3. **Spremenljivke na Vercelu.** Vercel → projekt → Settings → Environment Variables. Dodaj (vse kot skrivnosti, **brez** predpone `NEXT_PUBLIC_`):
+   - `DATABASE_URL` = URI iz koraka 2,
+   - `PAYLOAD_SECRET` = vsaj 32 naključnih znakov (npr. rezultat ukaza `openssl rand -hex 32`),
+   - `CMS_SETUP_TOKEN` = vsaj 16 naključnih znakov (potreben samo za prvega urednika).
+4. **Shramba datotek.** Vercel → projekt → Storage → Create → **Blob** → poveži s projektom. Vercel sam doda `BLOB_READ_WRITE_TOKEN`. Brez tega naložene slike in videi na Vercelu ne bodo shranjeni trajno.
+5. **Ponovna objava.** Vercel → Deployments → zadnja objava → Redeploy. Ob prvem zagonu urejevalnik sam ustvari tabele v shemi `cms` (migracije v `cms/migrations/`).
+6. **Prvi urednik.** Odpri `https://gradimocamper.vercel.app/cms`. Prikaže se obrazec za prvega urednika: vpiši e-pošto, geslo in **nastavitveni žeton** (`CMS_SETUP_TOKEN`). Brez pravilnega žetona prvega urednika ni mogoče ustvariti. Žeton se ne shrani. Ko urednik obstaja, lahko `CMS_SETUP_TOKEN` izbrišeš.
+
+Dodatne urednike dodaš v urejevalniku: Nastavitve → Uredniki → Ustvari. Prijava: 5 napačnih poskusov zaklene račun za 15 minut; seja traja 8 ur.
+
+### 17.3 Vzorčne vsebine
+
+Na nadzorni plošči urejevalnika (`/cms`) klikni **Ustvari vzorčne vsebine**. Ustvari se:
+
+- 8 faz gradnje, 5 tem, 3 področja izdelkov,
+- članek »Prvi koraki: kako načrtovati predelavo kombija«,
+- video lekcija »Poraba elektrike: kako določiti velikost baterije« (s kratkim vzorčnim posnetkom in podnapisi),
+- učna pot »Začni tukaj: od ideje do načrta«,
+- 3 vzorčni izdelki na področju »Elektrika in solarni sistem« (brez cene, brez certifikatov, z oznako »vzorec«),
+- besedila domače strani in strani O nas.
+
+Vse vzorčne vsebine imajo oznako **Vzorčna vsebina** in na strani prikažejo opozorilo. Ponoven klik ne podvoji vnosov. Pred javno objavo vzorce zamenjaj z resničnimi vsebinami ali jih izbriši.
+
+### 17.4 Dodajanje vsebin
+
+Vse vsebine dodajaš v `/cms`. Članki, videi, učne poti in izdelki imajo **osnutek in objavo**: »Shrani osnutek« ni viden obiskovalcem, »Objavi« oziroma »Objavi spremembe« je. URL (slug) se ustvari iz naslova, če ga pustiš praznega.
+
+| Kaj | Kje v urejevalniku | Obvezno | Nasvet |
+| --- | --- | --- | --- |
+| Faza gradnje | Razvrščanje → Faze gradnje | naziv, številka, kratek opis | Številka določa vrstni red v načrtu gradnje. |
+| Tema | Razvrščanje → Teme | naziv | Teme povezujejo vsebine (npr. Elektrika). |
+| Članek | Učenje → Članki | naslov, povzetek, čas branja, zahtevnost, faza, vsebina | Ključni poudarki in varnostna opomba se prikažejo na vrhu. Pod »Izdelki« izberi opremo, uporabljeno v vodiču. |
+| Video lekcija | Učenje → Video lekcije | naslov, povzetek, vir, trajanje, zahtevnost, faza | Vir: povezava YouTube ali naložena datoteka. Poglavja vpiši kot `4:30` + naslov. |
+| Učna pot | Učenje → Učne poti | naslov, opis, koraki | Vsak korak je članek ali video. Pot z oznako »Prikaži kot »Začni tukaj«« se prikaže na domači strani. |
+| Področje izdelkov | Izdelki → Kategorije izdelkov | naziv | »Vodič »Kako izbrati«« je članek, ki se priporoči na vrhu področja. |
+| Izdelek | Izdelki → Izdelki | naziv, področje, kratek opis, zahtevnost vgradnje, dobavljivost | Cena je neobvezna (brez cene: »Cena na povpraševanje«). Ne vpisuj ocen, mnenj ali certifikatov, ki jih nimaš dokazanih. |
+| Slika | Datoteke → Slike | datoteka, opis slike | Opis (alt) je obvezen. V »Avtor/vir« zapiši, od kod je slika in ali jo smeš uporabiti. |
+| Domača stran, O nas | Strani | – | Prazna polja domače strani uporabijo privzeta besedila. |
+
+**Videi.** Brezplačni paket Vercel Blob ima 1 GB prostora in 10 GB prenosa na mesec (stanje ob pripravi; preveri na Vercelu). Na platformo nalagaj samo kratke posnetke (MP4); daljše objavi na YouTubu in v video lekcijo vpiši povezavo. Predvajalnik YouTube se naloži šele ob kliku (youtube-nocookie.com), zato do klika ni povezave z YouTubom. Podnapise naložiš kot datoteko `.vtt` (Datoteke → Dokumenti).
+
+### 17.5 Povpraševanja
+
+Oddana povpraševanja in vprašanja so v urejevalniku: **Povpraševanja → Povpraševanja** (vidijo jih samo uredniki). Vsako ima vrsto (povpraševanje, vprašanje, rezervacija), e-pošto, neobvezno ime, sporočilo, izdelke s količinami in stanje (nova, v obdelavi, zaključeno). Na povpraševanje odgovoriš po e-pošti.
+
+- **Obvestila po e-pošti ni**: nova povpraševanja preverjaj v urejevalniku.
+- Zaščita: preverjanje izvora, past za robote, omejitev 5 oddaj v 15 minutah z istega IP-naslova (enak mehanizem kot pri prijavi na obvestilo; IP se ne shrani).
+- Rok hrambe po politiki zasebnosti: 12 mesecev od zadnjega stika. Brisanje je ročno (izberi in izbriši v seznamu).
+
+### 17.6 Merjenje dogodkov (pripravljeno, ni vklopljeno)
+
+Stran ne uporablja analitike in ne nastavlja piškotkov za sledenje. Ključni dogodki se sprožijo kot dogodek brskalnika `gc:dogodek` in se dodajo v `window.dataLayer`, če ta obstaja (`lib/analytics.ts`):
+
+`video_predvajanje`, `vodic_prebran`, `korak_poti_opravljen`, `izdelek_ogled`, `klik_izdelka_iz_vodica`, `dodano_v_povprasevanje`, `povprasevanje_oddano`, `kontakt_oddan`, `iskanje`.
+
+Ko izbereš orodje za analitiko, ga priklopiš v `lib/analytics.ts`. Orodje, ki uporablja piškotke ali podobne tehnologije, zahteva predhodno privolitev obiskovalca in dopolnitev politike zasebnosti.
+
+### 17.7 Objava platforme (po potrditvi lastnika)
+
+- [ ] Vzorčne vsebine zamenjane z resničnimi ali izbrisane.
+- [ ] Pravni pregled pogojev uporabe (`/pogoji` je označen kot osnutek, z mesti za dopolnitev) in politike zasebnosti (deli o povpraševanjih se prikažejo, ko je platforma javna).
+- [ ] Preverjene pravice za vse slike in videe.
+- [ ] `PLATFORM_PUBLIC=true` na Vercelu in ponovna objava.
+- [ ] Preizkus na objavljeni strani: povpraševanje, vprašanje, video, iskanje.
+- [ ] Ko je stran pripravljena za iskalnike: `ALLOW_INDEXING=true`. Sitemap tedaj vključi objavljene vsebine.
+
+### 17.8 Česa ta različica ne vsebuje (faza 2)
+
+Uporabniški računi za obiskovalce, plačila in spletna prodaja, obvestila po e-pošti ob novem povpraševanju, novice, ocene in mnenja, več jezikov, orodja (npr. kalkulator porabe), napredno iskanje. Pravne in homologacijske vsebine po odločitvi lastnika še niso pripravljene.
+
 ---
 
 ## Varnost na kratko
@@ -409,6 +516,7 @@ Pozneje (ni v tej različici): potrditveno sporočilo (double opt-in), storitev 
 - Administracija: identiteta se preveri pri strežniku Supabase Auth in primerja z `ADMIN_USER_ID` pri vsaki strani, akciji in izvozu. Piškotek seje je `HttpOnly`, omejen na `/admin`, `SameSite=Lax`, v produkciji `Secure`.
 - Zasebni odzivi imajo `Cache-Control: private, no-store` in `X-Robots-Tag: noindex`.
 - Varnostne glave (CSP, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`) v `next.config.ts`.
+- Urejevalnik: skrivnosti (`DATABASE_URL`, `PAYLOAD_SECRET`, `CMS_SETUP_TOKEN`, `BLOB_READ_WRITE_TOKEN`) samo na strežniku; prvega urednika ni mogoče ustvariti brez nastavitvenega žetona; zaklep po 5 napačnih prijavah; GraphQL izklopljen; povpraševanja in uredniki niso dostopni brez prijave; `/cms` in `/api` imata `noindex`, `/cms` tudi `no-store`. Brez nastavitev urejevalnika `/cms` in `/api` vrneta 404.
 
 ---
 
@@ -430,4 +538,16 @@ npm test
 npm run build
 ```
 
-Enotski testi (`tests/`) pokrivajo normalizacijo in preverjanje naslovov, logiko obrazca, CSV (ubežanje, zaščita pred formulami, BOM), parametre administracije, psevdonimizacijo IP-naslovov, časovne žige in pravila indeksiranja.
+Enotski testi (`tests/`) pokrivajo normalizacijo in preverjanje naslovov, logiko obrazca, CSV (ubežanje, zaščita pred formulami, BOM), parametre administracije, psevdonimizacijo IP-naslovov, časovne žige, pravila indeksiranja, URL-je (slug), povezave YouTube, slovensko množino ter preverjanje povpraševanj.
+
+Ukazi urejevalnika (lokalno, z `DATABASE_URL` in `PAYLOAD_SECRET` v `.env.local`):
+
+```bash
+npm run cms:migrate
+```
+
+```bash
+npm run cms:types
+```
+
+Po spremembi zbirk v `cms/collections/` ustvari novo migracijo z `npm run cms:migrate:create` in jo dodaj v Git.

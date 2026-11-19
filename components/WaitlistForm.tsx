@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState, useEffect, useRef, useState, type FormEvent } from "react";
-import { subscribeToWaitlist } from "@/app/actions/waitlist";
+import { subscribeToWaitlist } from "@/app/(frontend)/actions/waitlist";
 import { consent, form as copy } from "@/content";
 import {
   FIELD,

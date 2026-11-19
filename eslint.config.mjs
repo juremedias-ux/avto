@@ -14,6 +14,10 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Starejši statični prototip (ni del GradimoCamper):
     "script.js",
+    // Samodejno ustvarjene datoteke urejevalnika Payload:
+    "cms/migrations/**",
+    "payload-types.ts",
+    "app/(payload)/cms/importMap.js",
   ]),
   {
     rules: {

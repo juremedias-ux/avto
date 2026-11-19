@@ -17,6 +17,7 @@ import { getServiceClient } from "@/lib/supabase/service";
 export const RATE_LIMITS = {
   waitlist: { limit: 5, windowSeconds: 10 * 60 },
   adminLogin: { limit: 8, windowSeconds: 15 * 60 },
+  inquiry: { limit: 5, windowSeconds: 15 * 60 },
 } as const;
 
 export type RateLimitScope = keyof typeof RATE_LIMITS;

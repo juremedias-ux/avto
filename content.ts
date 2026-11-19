@@ -196,7 +196,7 @@ export const images = {
 export const privacyPage = {
   title: "Politika zasebnosti",
   /** Datum zadnje spremembe besedila politike. */
-  updated: "5. 11. 2026",
+  updated: "19. 11. 2026",
   /** Po pravnem pregledu nastavi na true; obvestilo spodaj se skrije. */
   legallyReviewed: false,
   reviewNotice: "Besedilo še ni pravno pregledano.",

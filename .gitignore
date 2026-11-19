@@ -253,3 +253,8 @@ supabase/.branches/
 .DS_Store
 *.pem
 npm-debug.log*
+
+# lokalno naložene datoteke urejevalnika (brez Vercel Blob, samo razvoj)
+/mediji/
+/video-datoteke/
+/datoteke/
