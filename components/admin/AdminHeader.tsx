@@ -1,4 +1,4 @@
-import { signOutAction } from "@/app/admin/actions";
+import { signOutAction } from "@/app/(frontend)/admin/actions";
 import { Logo } from "@/components/Logo";
 
 export function AdminHeader({ email }: { email?: string | null }) {

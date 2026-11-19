@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { signInAction, type LoginState } from "@/app/admin/prijava/actions";
+import { signInAction, type LoginState } from "@/app/(frontend)/admin/prijava/actions";
 
 const initialState: LoginState = { attempt: 0 };
 
